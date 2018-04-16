@@ -30,7 +30,7 @@ class LatestNewsController extends Controller
         'ended_at'=>[
             'required',
             'date',
-            'after:created_at'
+            'after:today'
         ]
     ];
     //顯示「最新消息」資料

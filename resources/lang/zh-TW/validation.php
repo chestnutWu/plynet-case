@@ -122,7 +122,6 @@ return [
         'picture' => '圖片',
         'created_at' => '發布日期',
         'ended_at' => '截止日期',
-        'introduction' => '介紹'
+        'introduction' => '介紹',
     ],
-
 ];

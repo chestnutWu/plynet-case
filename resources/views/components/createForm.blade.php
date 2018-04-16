@@ -20,6 +20,7 @@
         <div class="form-group col-md-12">
             <label for="picture" class="col-form-label">圖片:</label>
             <input type="file" id="picture" name="picture">
+            <img class="image">
         </div>
     </div>
     <div class="row">

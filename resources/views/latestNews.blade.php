@@ -54,7 +54,6 @@
             success: function (){
                 console.log("Delete Works");
                 window.location.replace("http://localhost:8000/latestNews");
-                console.log(window.location.href);
             },
             error:function(){
                 console.log("Delete failed");
@@ -63,9 +62,8 @@
     }
     // handle update button
     $(".update_record_id").click(function(event){idClicked = event.target.id;});
-    // fill the edit modal
     $('#edit_modal').on('show.bs.modal', function (event) {
-        if(event.relatedTarget){ //if caused by update button
+        if(event.relatedTarget){ //if caused by update button click
             var prefix_selector = "tr[id="+idClicked+"]";
             var title = $(prefix_selector+" td[class='title']").text();
             var classification = $(prefix_selector+" td[class='classification']").text();
@@ -73,19 +71,44 @@
             var introduction = $(prefix_selector+" td[class='introduction']").text();
             var ended_at = $(prefix_selector+" td[class='ended_at']").text();
             var content = $(prefix_selector+" td[class='content']").text();
-        
+            // fill the edit modal
             var modal = $(this);
             modal.find('form').attr('action','/latestNews/'+idClicked+'/update');
             modal.find('#title').val(title);
             modal.find('.selectpicker').selectpicker('val',classification);
-            modal.find('#image').attr('src',image);
+            modal.find('.image').attr('src',image);
             modal.find('#introduction').text(introduction);
             modal.find('#end_date').val(ended_at);
             modal.find('#content').text(content);
         }
     })
-    
-    // validation error display
+    // clean content in create modal
+    $('#create_modal').on('show.bs.modal', function (event) {
+        if(event.relatedTarget){ //if caused by create button click
+            var modal = $(this);
+            modal.find('#title').val("");
+            modal.find('.selectpicker').selectpicker('val',"最新消息");
+            modal.find('#picture').val("");
+            modal.find('.image').attr('src',"");
+            modal.find('#introduction').text("");
+            modal.find('#end_date').val("");
+            modal.find('#content').text("");
+            modal.find('.create-error-message').empty();
+        }
+    })
+    // display choosed image
+    $('input[type="file"]').change(function(){
+        var fileInput = this;
+        if(fileInput.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $('.image').attr('src',e.target.result);
+                console.log('change image');
+            }
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    });
+    // validation errors display
     @if(Session::has('create_error') AND count($errors))
         $('#create_modal').modal({show:true});
         @foreach($errors->all() as $err)
@@ -94,7 +117,6 @@
     @endif
     @if(Session::has('update_error') AND count($errors))
         idClicked = '{{Session::get('update_id')}}';
-        console.log(idClicked);
         $('#edit_modal').modal({show:true});
         $('#edit_modal form').attr('action','/latestNews/'+idClicked+'/update');
         @foreach($errors->all() as $err)
