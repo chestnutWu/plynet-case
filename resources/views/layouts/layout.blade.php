@@ -55,6 +55,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <!--import bootstrap-select-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+        <!--import text editor-->
+        <script src="//cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
         @yield('page-script')
     </body>
 </html>

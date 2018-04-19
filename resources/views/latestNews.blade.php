@@ -41,6 +41,18 @@
 
 @section('page-script')
 <script type="text/javascript">
+    CKEDITOR.replace('editor');
+    $(document).ready(function(){
+        $.fn.modal.Constructor.prototype.enforceFocus = function () {
+            var $modalElement = this.$element;
+            $(document).on('focusin.modal', function (e) {
+                var $parent = $(e.target.parentNode);
+                if ($modalElement[0] !== e.target && !$modalElement.has(e.target).length &&
+                    !$parent.hasClass('cke_dialog_ui_input_select') && !$parent.hasClass('cke_dialog_ui_input_text')) {$modalElement.focus()}
+            })
+        }
+    });
+    
     var idClicked;
     // handle delete button
     $(".delete_record_id").click(function(event){idClicked = event.target.id;});
@@ -96,7 +108,7 @@
             modal.find('.create-error-message').empty();
         }
     })
-    // display choosed image
+    // display changed image
     $('input[type="file"]').change(function(){
         var fileInput = this;
         if(fileInput.files[0]){
@@ -123,5 +135,20 @@
             $('#edit_modal .edit-error-message').append('{{$err}}<br>');
         @endforeach
     @endif
+    //on radio button changed
+    $('input[name="inlineRadioOptions"]').on('change',function(){
+        if($(this).val()=='no-content'){
+            $('.hyper-link-field').hide();
+            $('.content-field').hide();
+        }
+        else if($(this).val()=='hypertext-content'){
+            $('.hyper-link-field').show();
+            $('.content-field').hide();
+        }
+        else if($(this).val()=='as-input-content'){
+            $('.hyper-link-field').hide();
+            $('.content-field').show();
+        }
+    })
 </script>
 @endsection
