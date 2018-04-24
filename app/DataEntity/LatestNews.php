@@ -14,6 +14,8 @@ class LatestNews extends Model
         "picture",
         "introduction",
         "content",
+        "editor_input",
+        "hypertext",
         "ended_at"
     ];
 }

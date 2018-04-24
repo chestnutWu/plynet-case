@@ -19,7 +19,7 @@ class CreateLatestNewsTable extends Migration
             $table->string('classification',4)->default('最新消息');
             $table->string('picture');
             $table->text('introduction');
-            $table->string('content')->default('無');
+            $table->string('content')->default('無內文');
             $table->timestamps();
         });
     }

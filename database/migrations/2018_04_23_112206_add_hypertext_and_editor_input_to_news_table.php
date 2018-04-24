@@ -4,21 +4,21 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddEndedAtToLatestNewsTable extends Migration
+class AddHypertextAndEditorInputToNewsTable extends Migration
 {
     public function up()
     {
-        //add ended_date column
         Schema::table('latest_news', function (Blueprint $table) {
-            $table->date('ended_at')->after('updated_at')->default('2099-12-31');
+            $table->string('hypertext')->nullable()->after('content');
+            $table->longText('editor_input')->nullable()->after('content');
         });
     }
 
     public function down()
     {
-        //delete ended_date column
         Schema::table('latest_news', function (Blueprint $table) {
-            $table->dropColumn('ended_at');
+            $table->dropColumn('hypertext');
+            $table->dropColumn('editor_input');
         });
     }
 }

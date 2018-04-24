@@ -44,7 +44,7 @@ class LatestNewsController extends Controller
     }
     //新增「最新消息」
     public function latestNewsCreate(){
-        //接收輸入資料
+        //接收表單資料
         $input = request()->all();
         $validator = Validator::make($input,$this->rules);
         if($validator->fails()){
@@ -59,6 +59,15 @@ class LatestNewsController extends Controller
         $file_path = public_path($file_relative_path);
         $image = Image::make($picture)->fit(300,150)->save($file_path);
         $input['picture'] = $file_relative_path;
+        //判斷內文選項
+        if($input['content'] == '無內文'){
+            $input['hypertext'] = null;
+            $input['editor_input'] = null;
+        }else if($input['content'] == '超連結內文'){
+            $input['editor_input'] = null;
+        }else{//如輸入內容
+            $input['hypertext'] = null;
+        }
         //新增「最新消息」資料
         $LatestNews = LatestNews::create($input);
         return redirect('/latestNews');
@@ -83,6 +92,15 @@ class LatestNewsController extends Controller
             $file_path = public_path($file_relative_path);
             $image = Image::make($picture)->fit(300,150)->save($file_path);
             $input['picture'] = $file_relative_path;
+        }
+        //判斷內文選項
+        if($input['content'] == '無內文'){
+            $input['hypertext'] = null;
+            $input['editor_input'] = null;
+        }else if($input['content'] == '超連結內文'){
+            $input['editor_input'] = null;
+        }else{//如輸入內容
+            $input['hypertext'] = null;
         }
         $LatestNews->update($input);
         return redirect('/latestNews');
