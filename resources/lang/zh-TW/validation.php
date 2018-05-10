@@ -123,5 +123,6 @@ return [
         'created_at' => '發布日期',
         'ended_at' => '截止日期',
         'introduction' => '介紹',
+        'content' => '內文'
     ],
 ];

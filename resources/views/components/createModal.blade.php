@@ -3,7 +3,7 @@
 @section('modal_title','建立「最新消息」')
 @section('modal_content')
     @include('components.navTabs')
-    <form action="/latestNews/create" method="post" enctype="multipart/form-data">
+    <form action="/news/create" method="post" enctype="multipart/form-data">
         <div class="tab-content">
             <div class="tab-pane fade in active" id="create-basic-info" role="tabpanel" aria-labelledby="home-tab">
                 @include('components.newsBasicInfo')

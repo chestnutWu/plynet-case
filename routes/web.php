@@ -10,10 +10,14 @@
 |
 */
 
-Route::get('/', function () {return view('welcome');});
-Route::group(['prefix'=>'latestNews'],function(){
-    Route::get('/','LatestNewsController@latestNewsPageList');
-    Route::post('/create','LatestNewsController@latestNewsCreate');
-    Route::delete('/{news_id}/delete','LatestNewsController@latestNewsDelete');
-    Route::put('/{news_id}/update','LatestNewsController@latestNewsUpdate');
+Route::get('/', function () {return view('table');});
+Route::group(['prefix'=>'news'],function(){
+    Route::get('/','NewsController@newsPageList');
+    Route::post('/create','NewsController@newsCreate');
+    Route::delete('/{news_id}/delete','NewsController@newsDelete');
+    Route::put('/{news_id}/update','NewsController@newsUpdate');
+});
+Route::group(['prefix'=>'orders'],function(){
+    Route::get('/','OrdersController@ordersPageList');
+    Route::put('/{order_id}/update/{status}','OrdersController@orderUpdate');
 });

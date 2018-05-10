@@ -1,6 +1,17 @@
 @extends('layouts.layout')
-@section('title',$title)
-
+@section('toolbar')
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">最新消息</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#" data-toggle="modal" data-target="#create_modal"><span class="glyphicon glyphicon-plus"></span> 新增消息</a></li>
+        </ul>
+        @include('components.toolbarComponent')
+      </div>
+</nav>
+@endsection
 @section('content')
     @include('components.createModal',['modal_id'=>'create_modal'])
     @include('components.updateModal',['modal_id'=>'update_modal'])
@@ -15,6 +26,7 @@
             <th>發布日期</th> 
             <th>截止日期</th>
             <th>內文</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -32,14 +44,14 @@
             <td class="editor_input" hidden="true">{{$NewsRow->editor_input}}</td>
             <td>
                 <button type="button" class="btn btn-danger delete_record_id" id="{{$NewsRow->id}}" data-toggle="modal" data-target="#delete_modal">刪除</button>
-            </td>
-            <td>
                 <button type="button" class="btn btn-warning update_record_id" id="{{$NewsRow->id}}" data-toggle="modal" data-target="#update_modal">編輯</button>
             </td>
         </tr>
         @endforeach
     </tbody>
 </table>
+<!--分頁頁數按鈕-->
+<center>{{$News->links()}}</center>
 @endsection
 
 @section('page-script')
@@ -65,10 +77,10 @@
         $.ajax(
         {
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: "/latestNews/"+idClicked+"/delete",
+            url: "/news/"+idClicked+"/delete",
             type: 'DELETE',
             success: function (){
-                window.location.replace("http://localhost:8000/latestNews");
+                window.location.replace("http://localhost:8000/news");
             },
             error:function(){
                 alert("Delete function failed");
@@ -91,7 +103,7 @@
             var editor_input = $(prefix_selector+" td[class='editor_input']").text();
             // fill the edit modal
             var modal = $(this);
-            modal.find('form').attr('action','/latestNews/'+idClicked+'/update');
+            modal.find('form').attr('action','/news/'+idClicked+'/update');
             modal.find('input[name="title"]').val(title);
             modal.find('select[name="classification"]').selectpicker('val',classification);
             modal.find('.image').attr('src',image);
@@ -144,7 +156,7 @@
     @if(Session::has('update_error') AND count($errors))
         idClicked = '{{Session::get('update_id')}}';
         $('#update_modal').modal({show:true});
-        $('#update_modal form').attr('action','/latestNews/'+idClicked+'/update');
+        $('#update_modal form').attr('action','/news/'+idClicked+'/update');
         var content = $(':radio[name="content"]:checked').val();
         toggleContentView(content);
         @foreach($errors->all() as $err)
