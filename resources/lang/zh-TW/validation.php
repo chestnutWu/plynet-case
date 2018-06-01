@@ -121,8 +121,16 @@ return [
         'title' => '標題',
         'picture' => '圖片',
         'created_at' => '發布日期',
-        'ended_at' => '截止日期',
         'introduction' => '介紹',
-        'content' => '內文'
+        'content' => '內容',
+        'region' => '地區',
+        'topic' => '促銷主題',
+        'started_at' => '起始顯示日期',
+        'ended_at' => '截止顯示日期',
+        'depart_date' => '航班出發日期',
+        'return_date' => '航班回程日期',
+        'sales_instruction' => '售票說明',
+        'sales_tel' => '訂票專線',
+        'price' => '票價'
     ],
 ];

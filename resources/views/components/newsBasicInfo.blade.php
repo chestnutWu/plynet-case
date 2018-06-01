@@ -24,7 +24,7 @@
 </div>
 <div class="row">
     <div class="form-group col-md-6">
-        <label for="ended_at" class="col-form-label">截止日期:</label>
+        <label for="ended_at" class="col-form-label">截止顯示日期:</label>
         <input type="date" class="form-control" name="ended_at" value="{{old('ended_at')}}">
     </div>
 </div>

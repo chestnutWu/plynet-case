@@ -6,16 +6,16 @@
             <a class="navbar-brand">最新消息</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="modal" data-target="#create_modal"><span class="glyphicon glyphicon-plus"></span> 新增消息</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#create_news_modal"><span class="glyphicon glyphicon-plus"></span> 新增消息</a></li>
         </ul>
         @include('components.toolbarComponent')
-      </div>
+    </div>
 </nav>
 @endsection
 @section('content')
-    @include('components.createModal',['modal_id'=>'create_modal'])
-    @include('components.updateModal',['modal_id'=>'update_modal'])
-    @include('components.deleteModal',['modal_id'=>'delete_modal'])
+    @include('components.createNewsModal',['modal_id'=>'create_news_modal'])
+    @include('components.updateNewsModal',['modal_id'=>'update_news_modal'])
+    @include('components.deleteNewsModal',['modal_id'=>'delete_news_modal'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
@@ -24,8 +24,8 @@
             <th>小圖</th>
             <th>簡介</th>
             <th>發布日期</th> 
-            <th>截止日期</th>
-            <th>內文</th>
+            <th>截止顯示日期</th>
+            <th>內容</th>
             <th></th>
         </tr>
     </thead>
@@ -43,8 +43,8 @@
             <td class="hypertext" hidden="true">{{$NewsRow->hypertext}}</td>
             <td class="editor_input" hidden="true">{{$NewsRow->editor_input}}</td>
             <td>
-                <button type="button" class="btn btn-danger delete_record_id" id="{{$NewsRow->id}}" data-toggle="modal" data-target="#delete_modal">刪除</button>
-                <button type="button" class="btn btn-warning update_record_id" id="{{$NewsRow->id}}" data-toggle="modal" data-target="#update_modal">編輯</button>
+                <button type="button" class="btn btn-danger delete_record_id" id="{{$NewsRow->id}}" data-toggle="modal" data-target="#delete_news_modal">刪除</button>
+                <button type="button" class="btn btn-warning update_record_id" id="{{$NewsRow->id}}" data-toggle="modal" data-target="#update_news_modal">編輯</button>
             </td>
         </tr>
         @endforeach
@@ -80,16 +80,16 @@
             url: "/news/"+idClicked+"/delete",
             type: 'DELETE',
             success: function (){
-                window.location.replace("http://localhost:8000/news");
+                window.location.href = '../news';
             },
             error:function(){
-                alert("Delete function failed");
+                alert("Delete failed");
             }
         });
     }
     // handle update button
     $(".update_record_id").click(function(event){idClicked = event.target.id;});
-    $('#update_modal').on('show.bs.modal', function(event){
+    $('#update_news_modal').on('show.bs.modal', function(event){
         if(event.relatedTarget){ //if caused by update button click
             // get data from the table
             var prefix_selector = "tr[id="+idClicked+"]";
@@ -117,7 +117,7 @@
         }
     })
     // clean content in create modal
-    $('#create_modal').on('show.bs.modal',function(event){
+    $('#create_news_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
             modal.find('input[name="title"]').val("");
@@ -146,21 +146,21 @@
     });
     // display validation error messages 
     @if(Session::has('create_error') AND count($errors))
-        $('#create_modal').modal({show:true});
+        $('#create_news_modal').modal({show:true});
         var content = $(':radio[name="content"]:checked').val();
         toggleContentView(content);
         @foreach($errors->all() as $err)
-            $('#create_modal .create-error-message').append('{{$err}}<br>');
+            $('#create_news_modal .create-error-message').append('{{$err}}<br>');
         @endforeach
     @endif
     @if(Session::has('update_error') AND count($errors))
         idClicked = '{{Session::get('update_id')}}';
-        $('#update_modal').modal({show:true});
-        $('#update_modal form').attr('action','/news/'+idClicked+'/update');
+        $('#update_news_modal').modal({show:true});
+        $('#update_news_modal form').attr('action','/news/'+idClicked+'/update');
         var content = $(':radio[name="content"]:checked').val();
         toggleContentView(content);
         @foreach($errors->all() as $err)
-            $('#update_modal .update-error-message').append('{{$err}}<br>');
+            $('#update_news_modal .update-error-message').append('{{$err}}<br>');
         @endforeach
     @endif
     // radio button onchanged event

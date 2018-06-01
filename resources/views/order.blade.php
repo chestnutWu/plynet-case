@@ -16,7 +16,7 @@
             </li>
         </ul>
         @include('components.toolbarComponent')
-      </div>
+    </div>
 </nav>
 @endsection
 @section('content')

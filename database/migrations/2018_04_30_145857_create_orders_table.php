@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
             $table->string('address');//訂購人聯絡地址
             $table->string('tel');//訂購人連絡電話
             $table->string('email');//訂購人信箱
-            $table->timestamps();//訂單日期時間
+            $table->timestamps();//訂單(創立、更新)時間
             $table->date('ended_at');//匯款截止日期
             $table->string('status');//訂單狀態
             $table->string('item');//訂購項目

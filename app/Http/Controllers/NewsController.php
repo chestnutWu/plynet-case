@@ -38,9 +38,7 @@ class NewsController extends Controller
         ]
     ];
     //顯示「最新消息」資料
-    public function newsPageList()
-    {
-        //撈取「最新消息」資料
+    public function newsPageList(){
         $row_per_page = 10;
         $NewsPaginate = News::OrderBy('created_at','desc')->paginate($row_per_page);;
         //$Orders = DB::connection('remotemysql')->table('orders')->get();
@@ -49,32 +47,15 @@ class NewsController extends Controller
     }
     //新增「最新消息」
     public function newsCreate(){
-        //接收表單資料
-        $input = request()->all();
+        $input = request()->all();//接收表單資料
         $validator = Validator::make($input,$this->rules);
         if($validator->fails()){
             Session::flash('create_error',true);
             return redirect('/news')->withErrors($validator)->withInput();
         }
-        //儲存照片
-        $picture = $input['picture'];
-        $file_extension = $picture->getClientOriginalExtension();
-        $file_name = uniqid().'.'.$file_extension;
-        $file_relative_path = 'images/News/'.$file_name;
-        $file_path = public_path($file_relative_path);
-        $image = Image::make($picture)->fit(300,150)->save($file_path);
-        $input['picture'] = $file_relative_path;
-        //判斷內文選項
-        if($input['content'] == '無內文'){
-            $input['hypertext'] = null;
-            $input['editor_input'] = null;
-        }else if($input['content'] == '超連結內文'){
-            $input['editor_input'] = null;
-        }else{//如輸入內容
-            $input['hypertext'] = null;
-        }
-        //新增「最新消息」資料
-        $LatestNews = News::create($input);
+        $input = $this->pictureProcess($input);//照片處理
+        $input = $this->judgeSelectedContent($input);//判斷內文選項
+        News::create($input);
         return redirect('/news');
     }
     //更新「最新消息」
@@ -89,24 +70,8 @@ class NewsController extends Controller
             session()->put('update_id',$news_id);
             return redirect('/news')->withErrors($validator)->withInput();
         }
-        if(request()->hasFile('picture')){
-            $picture = $input['picture'];
-            $file_extension = $picture->getClientOriginalExtension();
-            $file_name = uniqid().'.'.$file_extension;
-            $file_relative_path = 'images/News/'.$file_name;
-            $file_path = public_path($file_relative_path);
-            $image = Image::make($picture)->fit(300,150)->save($file_path);
-            $input['picture'] = $file_relative_path;
-        }
-        //判斷內文選項
-        if($input['content'] == '無內文'){
-            $input['hypertext'] = null;
-            $input['editor_input'] = null;
-        }else if($input['content'] == '超連結內文'){
-            $input['editor_input'] = null;
-        }else{//如輸入內容
-            $input['hypertext'] = null;
-        }
+        if(request()->hasFile('picture')){$input = $this->pictureProcess($input);}//照片處理
+        $input = $this->judgeSelectedContent($input);//判斷內文選項
         $LatestNews->update($input);
         return redirect('/news');
     }
@@ -115,4 +80,27 @@ class NewsController extends Controller
         $News = News::find($news_id);
         $News->delete();
     }
+    /*self define funtion*/
+    public function pictureProcess($input){
+        $picture = $input['picture'];
+        $file_extension = $picture->getClientOriginalExtension();
+        $file_name = uniqid().'.'.$file_extension;
+        $file_relative_path = 'images/News/'.$file_name;
+        $file_path = public_path($file_relative_path);
+        $image = Image::make($picture)->fit(300,150)->save($file_path);
+        $input['picture'] = $file_relative_path;
+        return $input;
+    }
+    public function judgeSelectedContent($input){
+        if($input['content'] == '無內文'){
+            $input['hypertext'] = null;
+            $input['editor_input'] = null;
+        }else if($input['content'] == '超連結內文'){
+            $input['editor_input'] = null;
+        }else{//如輸入內容
+            $input['hypertext'] = null;
+        }
+        return $input;
+    }
+    /**/
 }

@@ -1,4 +1,3 @@
-<!--Create Modal -->
 @extends('components.masterModal')
 @section('modal_title','建立「最新消息」')
 @section('modal_content')
@@ -11,7 +10,10 @@
                 <div class="create-error-message"></div>
             </div>
             <div class="tab-pane fade" id="create-content" role="tabpanel" aria-labelledby="profile-tab">
-                @include('components.newsContent',['editor'=>'create_editor'])
+                @include('components.navContent')
+                <div class="row content-field">
+                    <textarea id="create_editor" name="editor_input" class="form-control">{{Input::old('editor_input')}}</textarea>
+                </div>
             </div>
         </div>
         <!--CSRF欄位-->{{csrf_field()}}
