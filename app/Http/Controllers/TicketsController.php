@@ -8,6 +8,7 @@ use Validator;
 use DB;
 use Session;
 use DateTime;
+use Illuminate\Http\Request;
 
 class TicketsController extends Controller
 {
@@ -54,7 +55,7 @@ class TicketsController extends Controller
     //顯示「特價清倉」
     public function ticketsPageList(){
         $row_per_page = 10;
-        $TicketPaginate = Ticket::OrderBy('created_at','desc')->paginate($row_per_page);;
+        $TicketPaginate = Ticket::OrderBy('id','desc')->paginate($row_per_page);;
         $binding = ['Tickets'=>$TicketPaginate];
         return view('tickets',$binding);
     }
@@ -72,10 +73,25 @@ class TicketsController extends Controller
         return redirect('/tickets');
     }
     
-    public function ticketsBatchCreate(){
-        $output = implode(",",request()->all());
-        $binding = ['test'=>$output];
-        return redirect('/',$binding);
+    public function ticketsBatchCreate(Request $request){
+        $data = json_decode($request->getContent(),true);
+        foreach($data as $insertKey => $insertValue){
+            $row = [
+                'region' => $insertValue['region'],
+                'topic' => $insertValue['topic'],
+                'sales_tel' => $insertValue['sales_tel'],
+                'started_at' => $insertValue['started_at'],
+                'ended_at' => $insertValue['ended_at'],
+                'depart_date' => $insertValue['depart_date'],
+                'return_date' => $insertValue['return_date'],
+                'sales_instruction' => $insertValue['sales_instruction'],
+                'price' => $insertValue['price'],
+                'content' => $insertValue['content'],
+                'editor_input' => $insertValue['editor_input'],
+            ];
+            $row = $this->createTicketNumber($row);
+            Ticket::create($row);
+        }
     }
     //刪除「特價清倉」
     public function ticketsDelete($ticket_id){
@@ -99,7 +115,7 @@ class TicketsController extends Controller
     /*self define function*/
     //自動產生機票單號
     public function createTicketNumber($input){
-        $last_ticket = Ticket::OrderBy('created_at','desc')->first();
+        $last_ticket = Ticket::OrderBy('id','desc')->first();
         $nowDate = date("Ymd");
         if(!$last_ticket){ //資料庫中沒有機票資料
             $input['ticket_number'] = $nowDate."001";

@@ -90,13 +90,11 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             url: "/tickets/"+idClicked+"/delete",
             type: 'DELETE',
-            contentType: "json",
-            processData: false,
             success: function (){
-                //window.location.href = '../tickets';
+                window.location.href = '../tickets';
             },
             error:function(){
-                alert("Delete failed");
+                console.log("Delete failed");
             }
         });
     }
