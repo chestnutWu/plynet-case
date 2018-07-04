@@ -8,7 +8,6 @@
         <ul class="nav navbar-nav">
             <li><a><span class="glyphicon glyphicon-edit"></span> 編輯訂單</a></li>
             <li>         
-                <!-- Rounded switch -->
                 <label class="switch">
                     <input type="checkbox" id="edit-checkbox">
                     <span class="slider round"></span>
@@ -19,6 +18,7 @@
     </div>
 </nav>
 @endsection
+
 @section('content')
 <table class="table table-striped table-hover col-md-12">
     <thead>
@@ -65,26 +65,23 @@
 <!--分頁頁數按鈕-->
 <center>{{$Orders->links()}}</center>
 @endsection
+
 @section('page-script')
 <script type="text/javascript">
-$(".selectpicker").change(function(){
-    var id = this.id;
-    var value = this.value;
-    $('tr[id='+id+'] form').attr('action','/orders/'+id+'/update/'+value);
-    $('tr[id='+id+'] form').submit();
-});
-$("#edit-checkbox").change(function(){
-    if($(this).is(":checked")){
-        //$('.selectpicker').removeProp('disabled');
-        $('.selectpicker').prop("disabled", false);
-        //$('.selectpicker').removeAttr("disabled");
-        $('.selectpicker').selectpicker('refresh');
-        console.log("hi");
-    }else{
-        $('.selectpicker').prop('disabled',true);
-        $('.selectpicker').selectpicker('refresh');
-        console.log("bye");
-    }
-});  
+    $(".selectpicker").change(function(){
+        var id = this.id;
+        var value = this.value;
+        $('tr[id='+id+'] form').attr('action','/orders/'+id+'/update/'+value);
+        $('tr[id='+id+'] form').submit();
+    });
+    $("#edit-checkbox").change(function(){
+        if($(this).is(":checked")){
+            $('.selectpicker').prop("disabled", false);
+            $('.selectpicker').selectpicker('refresh');
+        }else{
+            $('.selectpicker').prop('disabled',true);
+            $('.selectpicker').selectpicker('refresh');
+        }
+    });  
 </script>
 @endsection

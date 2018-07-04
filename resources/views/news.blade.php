@@ -12,6 +12,7 @@
     </div>
 </nav>
 @endsection
+
 @section('content')
     @include('components.createNewsModal',['modal_id'=>'create_news_modal'])
     @include('components.updateNewsModal',['modal_id'=>'update_news_modal'])
@@ -55,40 +56,16 @@
 @endsection
 
 @section('page-script')
+    
+<!--display validation error messages--> 
+@include('components.validationErrorMessage',['createModal'=>'create_news_modal','updateModal'=>'update_news_modal','updateRoute'=>'news'])
+
 <script type="text/javascript">
     CKEDITOR.replace('create_editor');
     CKEDITOR.replace('update_editor');
-    $(document).ready(function(){
-        //fixed the input problem using html editor in modal
-        $.fn.modal.Constructor.prototype.enforceFocus = function(){
-            var $modalElement = this.$element;
-            $(document).on('focusin.modal', function(e){
-                var $parent = $(e.target.parentNode);
-                if ($modalElement[0] !== e.target && !$modalElement.has(e.target).length &&
-                    !$parent.hasClass('cke_dialog_ui_input_select') && !$parent.hasClass('cke_dialog_ui_input_text')) {$modalElement.focus()}
-            })
-        }
-    });
     // handle delete button
-    var idClicked;
-    $(".delete_record_id").click(function(event){idClicked = event.target.id;});
-    $(".deleteBtn").click(ajaxDeleteFunction);
-    function ajaxDeleteFunction(event){
-        $.ajax(
-        {
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: "/news/"+idClicked+"/delete",
-            type: 'DELETE',
-            success: function (){
-                window.location.href = '../news';
-            },
-            error:function(){
-                alert("Delete failed");
-            }
-        });
-    }
+    $(".deleteBtn").click({route: "news"},ajaxDeleteFunction);
     // handle update button
-    $(".update_record_id").click(function(event){idClicked = event.target.id;});
     $('#update_news_modal').on('show.bs.modal', function(event){
         if(event.relatedTarget){ //if caused by update button click
             // get data from the table
@@ -144,40 +121,24 @@
             reader.readAsDataURL(fileInput.files[0]);
         }
     });
-    // display validation error messages 
-    @if(Session::has('create_error') AND count($errors))
-        $('#create_news_modal').modal({show:true});
-        var content = $(':radio[name="content"]:checked').val();
-        toggleContentView(content);
-        @foreach($errors->all() as $err)
-            $('#create_news_modal .create-error-message').append('{{$err}}<br>');
-        @endforeach
-    @endif
-    @if(Session::has('update_error') AND count($errors))
-        idClicked = '{{Session::get('update_id')}}';
-        $('#update_news_modal').modal({show:true});
-        $('#update_news_modal form').attr('action','/news/'+idClicked+'/update');
-        var content = $(':radio[name="content"]:checked').val();
-        toggleContentView(content);
-        @foreach($errors->all() as $err)
-            $('#update_news_modal .update-error-message').append('{{$err}}<br>');
-        @endforeach
-    @endif
-    // radio button onchanged event
-    $('input[name="content"]').on('change',function(){toggleContentView(this.value);})
-    // change view corresponding to radio button
-    function toggleContentView(condition){
-        if(condition == '超連結內文'){
-            $('.hyper-link-field').show();
-            $('.content-field').hide();
-        }
-        else if(condition == '如以下輸入'){
-            $('.hyper-link-field').hide();
-            $('.content-field').show();
-        }else{// 無內文 or 沒選擇 radio button 
-            $('.hyper-link-field').hide();
-            $('.content-field').hide();
-        }
-    }
+
+//    @if(Session::has('create_error') AND count($errors))
+//        $('#create_news_modal').modal({show:true});
+//        var content = $(':radio[name="content"]:checked').val();
+//        toggleContentView(content);
+//        @foreach($errors->all() as $err)
+//            $('#create_news_modal .create-error-message').append('{{$err}}<br>');
+//        @endforeach
+//    @endif
+//    @if(Session::has('update_error') AND count($errors))
+//        idClicked = '{{Session::get('update_id')}}';
+//        $('#update_news_modal').modal({show:true});
+//        $('#update_news_modal form').attr('action','/news/'+idClicked+'/update');
+//        var content = $(':radio[name="content"]:checked').val();
+//        toggleContentView(content);
+//        @foreach($errors->all() as $err)
+//            $('#update_news_modal .update-error-message').append('{{$err}}<br>');
+//        @endforeach
+//    @endif
 </script>
 @endsection

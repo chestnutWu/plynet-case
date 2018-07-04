@@ -26,6 +26,13 @@ Route::group(['prefix'=>'tickets'],function(){
     Route::delete('/{ticket_id}/delete','TicketsController@ticketsDelete');
     Route::put('/{tickets_id}/update','TicketsController@ticketsUpdate');
 });
+//出去走走
+Route::group(['prefix'=>'travels'],function(){
+    Route::get('/','TravelsController@travelsPageList');
+    Route::post('/create','TravelsController@travelCreate');
+    Route::delete('/{travel_id}/delete','TravelsController@travelDelete');
+    Route::put('/{travel_id}/update','TravelsController@travelUpdate');
+});
 //訂單查詢
 Route::group(['prefix'=>'orders'],function(){
     Route::get('/','OrdersController@ordersPageList');

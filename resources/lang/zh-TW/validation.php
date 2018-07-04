@@ -131,6 +131,13 @@ return [
         'return_date' => '航班回程日期',
         'sales_instruction' => '售票說明',
         'sales_tel' => '訂票專線',
-        'price' => '票價'
+        'price' => '票價',
+        'name' => '景點',
+        'icon' => '圖標',
+        'classification' => '分類',
+        'address' => '地址',
+        'longitude' => '經度',
+        'latitude' => '緯度',
+        'phone_number' => '連絡電話'
     ],
 ];

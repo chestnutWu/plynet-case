@@ -65,41 +65,20 @@
 @endsection
 
 @section('page-script')
+
+<!--display validation error messages--> 
+@include('components.validationErrorMessage',['createModal'=>'create_tickets_modal','updateModal'=>'update_tickets_modal','updateRoute'=>'tickets'])
+
+<!--import batch create form js-->
+<script src="{{ URL::asset('js/batch-create-form.js') }}"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        CKEDITOR.replace('create_editor');
-        CKEDITOR.replace('update_editor');
-        CKEDITOR.replace('create_batch_editor');
-        //fixed the input problem using html editor in modal
-        $.fn.modal.Constructor.prototype.enforceFocus = function(){
-            var $modalElement = this.$element;
-            $(document).on('focusin.modal', function(e){
-                var $parent = $(e.target.parentNode);
-                if ($modalElement[0] !== e.target && !$modalElement.has(e.target).length &&
-                    !$parent.hasClass('cke_dialog_ui_input_select') && !$parent.hasClass('cke_dialog_ui_input_text')) {$modalElement.focus()}
-            })
-        }
-    });
+    CKEDITOR.replace('create_editor');
+    CKEDITOR.replace('update_editor');
+    CKEDITOR.replace('create_batch_editor');
+
     // handle delete button
-    var idClicked;
-    $(".delete_record_id").click(function(event){idClicked = event.target.id;});
-    $(".deleteBtn").click(ajaxDeleteFunction);
-    function ajaxDeleteFunction(event){
-        $.ajax(
-        {
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url: "/tickets/"+idClicked+"/delete",
-            type: 'DELETE',
-            success: function (){
-                window.location.href = '../tickets';
-            },
-            error:function(){
-                console.log("Delete failed");
-            }
-        });
-    }
+    $(".deleteBtn").click({route: "tickets"},ajaxDeleteFunction);
     // handle update button
-    $(".update_record_id").click(function(event){idClicked = event.target.id;});
     $('#update_tickets_modal').on('show.bs.modal', function(event){
         if(event.relatedTarget){ //if caused by update button click
             // get data from the table
@@ -155,40 +134,24 @@
             toggleContentView("");
         }
     })
-    // display validation error messages 
-    @if(Session::has('create_error') AND count($errors))
-        $('#create_tickets_modal').modal({show:true});
-        var content = $(':radio[name="content"]:checked').val();
-        toggleContentView(content);
-        @foreach($errors->all() as $err)
-            $('#create_tickets_modal .create-error-message').append('{{$err}}<br>');
-        @endforeach
-    @endif
-    @if(Session::has('update_error') AND count($errors))
-        idClicked = '{{Session::get('update_id')}}';
-        $('#update_tickets_modal').modal({show:true});
-        $('#update_tickets_modal form').attr('action','/tickets/'+idClicked+'/update');
-        var content = $(':radio[name="content"]:checked').val();
-        toggleContentView(content);
-        @foreach($errors->all() as $err)
-            $('#update_tickets_modal .update-error-message').append('{{$err}}<br>');
-        @endforeach
-    @endif
-    // radio button onchanged event
-    $('input[name="content"]').on('change',function(){toggleContentView(this.value);})
-    // change view corresponding to radio button
-    function toggleContentView(condition){
-        if(condition == '超連結內文'){
-            $('.hyper-link-field').show();
-            $('.content-field').hide();
-        }
-        else if(condition == '如以下輸入'){
-            $('.hyper-link-field').hide();
-            $('.content-field').show();
-        }else{// 無內文 or 沒選擇 radio button 
-            $('.hyper-link-field').hide();
-            $('.content-field').hide();
-        }
-    }
+
+//    @if(Session::has('create_error') AND count($errors))
+//        $('#create_tickets_modal').modal({show:true});
+//        var content = $(':radio[name="content"]:checked').val();
+//        toggleContentView(content);
+//        @foreach($errors->all() as $err)
+//            $('#create_tickets_modal .create-error-message').append('{{$err}}<br>');
+//        @endforeach
+//    @endif
+//    @if(Session::has('update_error') AND count($errors))
+//        idClicked = '{{Session::get('update_id')}}';
+//        $('#update_tickets_modal').modal({show:true});
+//        $('#update_tickets_modal form').attr('action','/tickets/'+idClicked+'/update');
+//        var content = $(':radio[name="content"]:checked').val();
+//        toggleContentView(content);
+//        @foreach($errors->all() as $err)
+//            $('#update_tickets_modal .update-error-message').append('{{$err}}<br>');
+//        @endforeach
+//    @endif
 </script>
 @endsection

@@ -42,8 +42,55 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.5/js/bootstrap-dialog.min.js"></script>
         <!--import html editor-->
         <script src="//cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
-        <!--import batch create form js-->
-        <script src="{{ URL::asset('js/batch-create-form.js') }}"></script>
+        <!--import common script-->
+        <script>
+            var idClicked;
+            $(document).ready(function(){
+                // fixed the input problem using html editor in modal
+                $.fn.modal.Constructor.prototype.enforceFocus = function(){
+                    var $modalElement = this.$element;
+                    $(document).on('focusin.modal', function(e){
+                        var $parent = $(e.target.parentNode);
+                        if ($modalElement[0] !== e.target && !$modalElement.has(e.target).length &&
+                            !$parent.hasClass('cke_dialog_ui_input_select') && !$parent.hasClass('cke_dialog_ui_input_text')) {$modalElement.focus()}
+                    })
+                }
+                // regist event handler
+                $(".delete_record_id").click(function(event){idClicked = event.target.id;});
+                $(".update_record_id").click(function(event){idClicked = event.target.id;});
+                $('input[name="content"]').on('change',function(){toggleContentView(this.value);})
+            });
+            // delete ajax function
+            function ajaxDeleteFunction(event){
+                var route = event.data.route;
+                $.ajax(
+                {
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url: "/"+route+"/"+idClicked+"/delete",
+                    type: 'DELETE',
+                    success: function (){
+                        window.location.href = '../'+route;
+                    },
+                    error:function(){
+                        alert("Delete failed");
+                    }
+                });
+            }
+            // change view corresponding to radio button
+            function toggleContentView(condition){
+                if(condition == '超連結內文'){
+                    $('.hyper-link-field').show();
+                    $('.content-field').hide();
+                }
+                else if(condition == '如以下輸入'){
+                    $('.hyper-link-field').hide();
+                    $('.content-field').show();
+                }else{// 無內文 or 沒選擇 radio button 
+                    $('.hyper-link-field').hide();
+                    $('.content-field').hide();
+                }
+            }
+        </script>
         @yield('page-script')
     </body>
 </html>

@@ -60,6 +60,17 @@ function validateForm() {
             validations[i].innerHTML = "此欄位不能為空";
             valid = false;
         }
+        else {
+            inputs[i].classList.remove("invalid");
+            validations[i].innerHTML = "";
+        }
+        if (inputs[i].name == "price") {
+            if (isNaN(inputs[i].value)) {
+                inputs[i].className += " invalid";
+                validations[i].innerHTML = "此欄位須為數字";
+                valid = false;
+            }
+        }
     }
     // If the valid status is true, mark the step as finished and valid
     if (valid) {document.getElementsByClassName("step")[currentTab].className += " finish";}
@@ -77,20 +88,14 @@ function fixStepIndicator(tabPage) {
 }
 
 $('#create_batch_tickets_modal').on('show.bs.modal', function (e) {create_batch_modal = $(this); });
-function cleanField() {
-    create_batch_modal.find('input[name="started_at"]').val("");
-    create_batch_modal.find('input[name="ended_at"]').val("");
-    create_batch_modal.find('input[name="depart_date"]').val("");
-    create_batch_modal.find('input[name="return_date"]').val("");
-    create_batch_modal.find('input[name="price"]').val("");
-    create_batch_modal.find('input[name="sales_instruction"]').val("");
-    CKEDITOR.instances['create_batch_editor'].setData("");
-}
-
-//function removeRow() {
-//    $("#preview_table").on('click', '.remove', function () {
-//        $(this).closest('tr').remove();
-//    });
+//function cleanField() {
+//    create_batch_modal.find('input[name="started_at"]').val("");
+//    create_batch_modal.find('input[name="ended_at"]').val("");
+//    create_batch_modal.find('input[name="depart_date"]').val("");
+//    create_batch_modal.find('input[name="return_date"]').val("");
+//    create_batch_modal.find('input[name="price"]').val("");
+//    create_batch_modal.find('input[name="sales_instruction"]').val("");
+//    CKEDITOR.instances['create_batch_editor'].setData("");
 //}
 
 function sendCreateRequest(){
@@ -117,27 +122,28 @@ function fillRow(){
     var depart_date = '<td>' + create_batch_modal.find('input[name="depart_date"]').val().trim() + '</td>';
     var return_date = '<td>' + create_batch_modal.find('input[name="return_date"]').val().trim() + '</td>';
     var price = '<td>' + create_batch_modal.find('input[name="price"]').val().trim() + '</td>';
-    //var action = '<td>' + '<a onclick=' + removeRow() + ' class="remove"><i class="material-icons">&#xE872;</i></a>' + '</td>';
     var row_content = region + started_at + ended_at + depart_date + return_date + price;
     $('#preview_table tbody').append('<tr>' + row_content + '</tr>');
 }
 
 function addBatch() {
-    fillRow();
-    var batchDataObject = {
-        region: create_batch_modal.find('input[name="region"]').val().trim(),
-        topic: create_batch_modal.find('input[name="topic"]').val().trim(),
-        sales_tel: create_batch_modal.find('input[name="sales_tel"]').val().trim(),
-        started_at: create_batch_modal.find('input[name="started_at"]').val().trim(),
-        ended_at: create_batch_modal.find('input[name="ended_at"]').val().trim(),
-        depart_date: create_batch_modal.find('input[name="depart_date"]').val().trim(),
-        return_date: create_batch_modal.find('input[name="return_date"]').val().trim(),
-        price: create_batch_modal.find('input[name="price"]').val().trim(),
-        sales_instruction: create_batch_modal.find('input[name="sales_instruction"]').val(),
-        content: '如以下輸入',
-        editor_input: CKEDITOR.instances['create_batch_editor'].getData()
-    };
-    objectArray.push(batchDataObject);
-    alert("加入了: "+JSON.stringify(batchDataObject));
+    if(validateForm()){
+        fillRow();
+        var batchDataObject = {
+            region: create_batch_modal.find('input[name="region"]').val().trim(),
+            topic: create_batch_modal.find('input[name="topic"]').val().trim(),
+            sales_tel: create_batch_modal.find('input[name="sales_tel"]').val().trim(),
+            started_at: create_batch_modal.find('input[name="started_at"]').val().trim(),
+            ended_at: create_batch_modal.find('input[name="ended_at"]').val().trim(),
+            depart_date: create_batch_modal.find('input[name="depart_date"]').val().trim(),
+            return_date: create_batch_modal.find('input[name="return_date"]').val().trim(),
+            price: create_batch_modal.find('input[name="price"]').val().trim(),
+            sales_instruction: create_batch_modal.find('input[name="sales_instruction"]').val(),
+            content: '如以下輸入',
+            editor_input: CKEDITOR.instances['create_batch_editor'].getData()
+        };
+        objectArray.push(batchDataObject);
+        alert("加入了: "+JSON.stringify(batchDataObject)); 
+    }
     //cleanField();
 }
