@@ -11,6 +11,10 @@
             <a href="/orders" class="list-group-item list-group-item-action">訂單查詢</a>
         </ul>
     </li>
-    <li><a href="#"><span class="glyphicon glyphicon-user"></span> 註冊</a></li>
-    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登出</a></li>
+    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{Auth::user()->name}}</a></li>
+    <li>                                    
+        <a class="dropdown-item" href="{{ route('logout') }}"
+        onclick="event.preventDefault();document.getElementById('logout-form').submit();">登出</a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+    </li>
 </ul>

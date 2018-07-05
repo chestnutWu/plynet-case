@@ -126,24 +126,5 @@
             toggleContentView("");
         }
     })
-    
-//    @if(Session::has('create_error') AND count($errors))
-//        $('#create_travel_modal').modal({show:true});
-//        var content = $(':radio[name="content"]:checked').val();
-//        toggleContentView(content);
-//        @foreach($errors->all() as $err)
-//            $('#create_travel_modal .create-error-message').append('{{$err}}<br>');
-//        @endforeach
-//    @endif
-//    @if(Session::has('update_error') AND count($errors))
-//        idClicked = '{{Session::get('update_id')}}';
-//        $('#update_travel_modal').modal({show:true});
-//        $('#update_travel_modal form').attr('action','/travels/'+idClicked+'/update');
-//        var content = $(':radio[name="content"]:checked').val();
-//        toggleContentView(content);
-//        @foreach($errors->all() as $err)
-//            $('#update_travel_modal .update-error-message').append('{{$err}}<br>');
-//        @endforeach
-//    @endif
 </script>
 @endsection

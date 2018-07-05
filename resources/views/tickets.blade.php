@@ -85,10 +85,10 @@
             var prefix_selector = "tr[id="+idClicked+"]";
             var region = $(prefix_selector+" td[class='region']").text();
             var topic = $(prefix_selector+" td[class='topic']").text();
-            var depart_date = $(prefix_selector+" td[class='depart_date']").text();
-            var return_date = $(prefix_selector+" td[class='return_date']").text();
             var started_at = $(prefix_selector+" td[class='started_at']").text();
             var ended_at = $(prefix_selector+" td[class='ended_at']").text();
+            var depart_date = $(prefix_selector+" td[class='depart_date']").text();
+            var return_date = $(prefix_selector+" td[class='return_date']").text();
             var sales_instruction = $(prefix_selector+" td[class='sales_instruction']").text();
             var sales_tel = $(prefix_selector+" td[class='sales_tel']").text();
             var price = $(prefix_selector+" td[class='price']").text();
@@ -134,24 +134,5 @@
             toggleContentView("");
         }
     })
-
-//    @if(Session::has('create_error') AND count($errors))
-//        $('#create_tickets_modal').modal({show:true});
-//        var content = $(':radio[name="content"]:checked').val();
-//        toggleContentView(content);
-//        @foreach($errors->all() as $err)
-//            $('#create_tickets_modal .create-error-message').append('{{$err}}<br>');
-//        @endforeach
-//    @endif
-//    @if(Session::has('update_error') AND count($errors))
-//        idClicked = '{{Session::get('update_id')}}';
-//        $('#update_tickets_modal').modal({show:true});
-//        $('#update_tickets_modal form').attr('action','/tickets/'+idClicked+'/update');
-//        var content = $(':radio[name="content"]:checked').val();
-//        toggleContentView(content);
-//        @foreach($errors->all() as $err)
-//            $('#update_tickets_modal .update-error-message').append('{{$err}}<br>');
-//        @endforeach
-//    @endif
 </script>
 @endsection

@@ -9,7 +9,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {return view('welcome');});
 //最新消息
 Route::group(['prefix'=>'news'],function(){
@@ -38,3 +37,7 @@ Route::group(['prefix'=>'orders'],function(){
     Route::get('/','OrdersController@ordersPageList');
     Route::put('/{order_id}/update/{status}','OrdersController@orderUpdate');
 });
+//身分驗證、註冊、密碼重設路由
+Auth::routes();
+//登入頁面
+Route::get('/home', 'HomeController@index')->name('home');

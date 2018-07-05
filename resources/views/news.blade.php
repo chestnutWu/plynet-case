@@ -74,6 +74,7 @@
             var classification = $(prefix_selector+" td[class='classification']").text();
             var image = $(prefix_selector+" td[class='picture'] img").attr('src');
             var introduction = $(prefix_selector+" td[class='introduction']").text();
+            var created_at = $(prefix_selector+" td[class='created_at']").text();
             var ended_at = $(prefix_selector+" td[class='ended_at']").text();
             var content = $(prefix_selector+" td[class='content']").text();
             var hypertext = $(prefix_selector+" td[class='hypertext']").text();
@@ -121,24 +122,5 @@
             reader.readAsDataURL(fileInput.files[0]);
         }
     });
-
-//    @if(Session::has('create_error') AND count($errors))
-//        $('#create_news_modal').modal({show:true});
-//        var content = $(':radio[name="content"]:checked').val();
-//        toggleContentView(content);
-//        @foreach($errors->all() as $err)
-//            $('#create_news_modal .create-error-message').append('{{$err}}<br>');
-//        @endforeach
-//    @endif
-//    @if(Session::has('update_error') AND count($errors))
-//        idClicked = '{{Session::get('update_id')}}';
-//        $('#update_news_modal').modal({show:true});
-//        $('#update_news_modal form').attr('action','/news/'+idClicked+'/update');
-//        var content = $(':radio[name="content"]:checked').val();
-//        toggleContentView(content);
-//        @foreach($errors->all() as $err)
-//            $('#update_news_modal .update-error-message').append('{{$err}}<br>');
-//        @endforeach
-//    @endif
 </script>
 @endsection
