@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('註冊帳號') }}</div>
+                <div class="card-header">{{ __('建立帳號') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
@@ -63,8 +63,11 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
+                                <button class="btn btn-success" onclick="window.location='{{ url("news") }}'">
+                                    {{ __('返回後台') }}
+                                </button>
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
+                                    {{ __('建立') }}
                                 </button>
                             </div>
                         </div>

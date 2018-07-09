@@ -8,15 +8,15 @@
         <ul class="nav navbar-nav">
             <li><a href="#" data-toggle="modal" data-target="#create_news_modal"><span class="glyphicon glyphicon-plus"></span> 新增消息</a></li>
         </ul>
-        @include('components.toolbarComponent')
+        @include('components.toolbar')
     </div>
 </nav>
 @endsection
 
 @section('content')
-    @include('components.createNewsModal',['modal_id'=>'create_news_modal'])
-    @include('components.updateNewsModal',['modal_id'=>'update_news_modal'])
-    @include('components.deleteNewsModal',['modal_id'=>'delete_news_modal'])
+    @include('components.news.createModal',['modal_id'=>'create_news_modal'])
+    @include('components.news.updateModal',['modal_id'=>'update_news_modal'])
+    @include('components.news.deleteModal',['modal_id'=>'delete_news_modal'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
@@ -106,8 +106,8 @@
             modal.find('input[name="ended_at"]').val("");
             modal.find(':radio[name="content"]').prop('checked',false);
             modal.find('input[name="hypertext"]').val("");
-            CKEDITOR.instances['create_editor'].setData("");
             modal.find('.create-error-message').empty();
+            CKEDITOR.instances['create_editor'].setData("");
             toggleContentView("");
         }
     })

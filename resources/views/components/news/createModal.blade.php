@@ -1,16 +1,16 @@
 @extends('components.masterModal')
 @section('modal_title','建立「最新消息」')
 @section('modal_content')
-    @include('components.navTabs')
+    @include('components.modalTabs')
     <form action="/news/create" method="post" enctype="multipart/form-data">
         <div class="tab-content">
             <div class="tab-pane fade in active" id="create-basic-info" role="tabpanel" aria-labelledby="home-tab">
-                @include('components.newsBasicInfo')
+                @include('components.news.BasicInfo')
                 <button type="submit" class="btn btn-primary">新增</button>
                 <div class="create-error-message"></div>
             </div>
             <div class="tab-pane fade" id="create-content" role="tabpanel" aria-labelledby="profile-tab">
-                @include('components.navContent')
+                @include('components.modalContent')
                 <div class="row content-field">
                     <textarea id="create_editor" name="editor_input" class="form-control">{{Input::old('editor_input')}}</textarea>
                 </div>

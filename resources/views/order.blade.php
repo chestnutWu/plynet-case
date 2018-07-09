@@ -14,7 +14,7 @@
                 </label>
             </li>
         </ul>
-        @include('components.toolbarComponent')
+        @include('components.toolbar')
     </div>
 </nav>
 @endsection

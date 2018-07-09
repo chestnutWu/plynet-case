@@ -38,7 +38,7 @@
                                 @endif
                             </div>
                         </div>
-
+<!--
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="checkbox">
@@ -48,16 +48,17 @@
                                 </div>
                             </div>
                         </div>
-
+-->
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('登入') }}
                                 </button>
-
+<!--
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('忘記密碼?') }}
                                 </a>
+-->
                             </div>
                         </div>
                     </form>

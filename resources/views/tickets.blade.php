@@ -9,15 +9,15 @@
             <li><a href="#" data-toggle="modal" data-target="#create_tickets_modal"><span class="glyphicon glyphicon-plus"></span> 新增特價機票</a></li>
             <li><a href="#" data-toggle="modal" data-target="#create_batch_tickets_modal"><span class="glyphicon glyphicon-plus"></span> 批量新增特價機票</a></li>
         </ul>
-        @include('components.toolbarComponent')
+        @include('components.toolbar')
     </div>
 </nav>
 @endsection
 @section('content')
-    @include('components.createTicketsModal',['modal_id'=>'create_tickets_modal'])
-    @include('components.updateTicketsModal',['modal_id'=>'update_tickets_modal'])
-    @include('components.deleteTicketsModal',['modal_id'=>'delete_tickets_modal'])
-    @include('components.createBatchTicketsModal',['modal_id'=>'create_batch_tickets_modal'])
+    @include('components.ticket.createModal',['modal_id'=>'create_tickets_modal'])
+    @include('components.ticket.updateModal',['modal_id'=>'update_tickets_modal'])
+    @include('components.ticket.deleteModal',['modal_id'=>'delete_tickets_modal'])
+    @include('components.ticket.createBatchModal',['modal_id'=>'create_batch_tickets_modal'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
@@ -129,8 +129,8 @@
             modal.find('input[name="price"]').val("");
             modal.find(':radio[name="content"]').prop('checked',false);
             modal.find('input[name="hypertext"]').val("");
-            CKEDITOR.instances['create_editor'].setData("");
             modal.find('.create-error-message').empty();
+            CKEDITOR.instances['create_editor'].setData("");
             toggleContentView("");
         }
     })

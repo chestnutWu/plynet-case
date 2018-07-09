@@ -12,6 +12,9 @@
         </ul>
     </li>
     <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{Auth::user()->name}}</a></li>
+    @if (auth()->user()->type === 'Admin')
+        <li><a href="{{ route('register') }}"> 建立新帳號</a></li>
+    @endif
     <li>                                    
         <a class="dropdown-item" href="{{ route('logout') }}"
         onclick="event.preventDefault();document.getElementById('logout-form').submit();">登出</a>

@@ -7,8 +7,9 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="#" data-toggle="modal" data-target="#create_travel_modal"><span class="glyphicon glyphicon-plus"></span> 新增景點</a></li>
+            <li><a target="_blank" rel="noopener noreferrer" href="https://code.essoduke.org/gmap/"><span class="glyphicon glyphicon-transfer"></span> 地址經緯度轉換</a></li>
         </ul>
-        @include('components.toolbarComponent')
+        @include('components.toolbar')
     </div>
 </nav>
 @endsection
@@ -19,24 +20,22 @@
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
-            <th>景點</th>
-            <th>區域</th> 
-            <th>圖標</th>
-            <th>分類</th>
-            <th>地址</th> 
-            <th>經度</th>
-            <th>緯度</th>
-            <th>連絡電話</th>
-            <th>售票專線</th>
+            <th id="region">區域</th>
+            <th id="name">景點</th>
+            <th id="classification">分類</th>
+            <th id="address">地址</th>
+            <th id="longitude">經度</th>
+            <th id="latitude">緯度</th>
+            <th id="phone_number">連絡電話</th>
+            <th id="sales_tel">售票專線</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach($Travels as $TravelRow)
         <tr id="{{$TravelRow->id}}">
-            <td class="name">{{$TravelRow->name}}</td>
             <td class="region">{{$TravelRow->region}}</td>
-            <td class="icon">{{$TravelRow->icon}}</td>
+            <td class="name">{{$TravelRow->name}}</td>
             <td class="classification">{{$TravelRow->classification}}</td>
             <td class="address">{{$TravelRow->address}}</td>
             <td class="longitude">{{$TravelRow->longitude}}</td>
@@ -67,7 +66,10 @@
 <script type="text/javascript">
     CKEDITOR.replace('create_editor');
     CKEDITOR.replace('update_editor');
-
+    // initalize info row column to columns[]
+    var columns = [];
+    $('tr[class="info"]:nth-child(1) th').each(function(){columns.push(this.id);});
+    // console.log(columns);
     // handle delete button
     $(".deleteBtn").click({route: "travels"},ajaxDeleteFunction);
     // handle update button
@@ -75,9 +77,8 @@
         if(event.relatedTarget){ //if caused by update button click
             // get data from the table
             var prefix_selector = "tr[id="+idClicked+"]";
-            var name = $(prefix_selector+" td[class='name']").text();
             var region = $(prefix_selector+" td[class='region']").text();
-            var icon = $(prefix_selector+" td[class='icon']").text();
+            var name = $(prefix_selector+" td[class='name']").text();
             var classification = $(prefix_selector+" td[class='classification']").text();
             var address = $(prefix_selector+" td[class='address']").text();
             var longitude = $(prefix_selector+" td[class='longitude']").text();
@@ -92,7 +93,6 @@
             modal.find('form').attr('action','/travels/'+idClicked+'/update');
             modal.find('input[name="name"]').val(name);
             modal.find('input[name="region"]').val(region);
-            modal.find('input[name="icon"]').val(icon);
             modal.find('input[name="classification"]').val(classification);
             modal.find('input[name="address"]').val(address);
             modal.find('input[name="longitude"]').val(longitude);
@@ -110,19 +110,21 @@
     $('#create_travel_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            modal.find('input[name="name"]').val("");
-            modal.find('input[name="region"]').val("");
-            modal.find('input[name="icon"]').val("");
-            modal.find('input[name="classification"]').val("");
-            modal.find('input[name="address"]').val("");
-            modal.find('input[name="longitude"]').val("");
-            modal.find('input[name="latitude"]').val("");
-            modal.find('input[name="phone_number"]').val("");
-            modal.find('input[name="sales_tel"]').val("");
+            for(var i=0;i<columns.length-1;i++){
+                modal.find('input[name='+columns[i]+']').val("");
+            }
+//            modal.find('input[name="name"]').val("");
+//            modal.find('input[name="region"]').val("");
+//            modal.find('input[name="classification"]').val("");
+//            modal.find('input[name="address"]').val("");
+//            modal.find('input[name="longitude"]').val("");
+//            modal.find('input[name="latitude"]').val("");
+//            modal.find('input[name="phone_number"]').val("");
+//            modal.find('input[name="sales_tel"]').val("");
             modal.find(':radio[name="content"]').prop('checked',false);
             modal.find('input[name="hypertext"]').val("");
-            CKEDITOR.instances['create_editor'].setData("");
             modal.find('.create-error-message').empty();
+            CKEDITOR.instances['create_editor'].setData("");
             toggleContentView("");
         }
     })

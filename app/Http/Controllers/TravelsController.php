@@ -24,9 +24,6 @@ class TravelsController extends Controller
             'required',
             'max:30'
         ],
-        'icon'=>[
-            'required',
-        ],
         'classification'=>[
             'required',
             'max:20'

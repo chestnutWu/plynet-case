@@ -90,6 +90,10 @@
                     $('.content-field').hide();
                 }
             }
+            // clear modal content
+            function clearModal(){
+                
+            }
         </script>
         @yield('page-script')
     </body>
