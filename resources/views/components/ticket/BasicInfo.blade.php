@@ -40,6 +40,10 @@
 </div>
 <div class="row">
     <div class="form-group col-md-6">
+        <label class="col-form-label">機票單號:</label>
+        <input type="text" class="form-control" name="ticket_number" value="{{old('ticket_number')}}" placeholder="自動產生" disabled>
+    </div>
+    <div class="form-group col-md-6">
         <label class="col-form-label">訂票專線:</label>
         <input type="text" class="form-control" name="sales_tel" value="{{old('sales_tel')}}">
     </div>

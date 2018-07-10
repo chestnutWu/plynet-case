@@ -59,7 +59,6 @@
 @endsection
 
 @section('page-script')
-
 <!--display validation error messages--> 
 @include('components.validationErrorMessage',['createModal'=>'create_travel_modal','updateModal'=>'update_travel_modal','updateRoute'=>'travels'])
 
@@ -68,64 +67,26 @@
     CKEDITOR.replace('update_editor');
     // initalize info row column to columns[]
     var columns = [];
-    $('tr[class="info"]:nth-child(1) th').each(function(){columns.push(this.id);});
-    // console.log(columns);
+    $('tr[class="info"]:nth-child(1) th').each(function(){
+        if(this.id){
+            columns.push(this.id);
+        }
+    });
     // handle delete button
     $(".deleteBtn").click({route: "travels"},ajaxDeleteFunction);
     // handle update button
     $('#update_travel_modal').on('show.bs.modal', function(event){
-        if(event.relatedTarget){ //if caused by update button click
-            // get data from the table
-            var prefix_selector = "tr[id="+idClicked+"]";
-            var region = $(prefix_selector+" td[class='region']").text();
-            var name = $(prefix_selector+" td[class='name']").text();
-            var classification = $(prefix_selector+" td[class='classification']").text();
-            var address = $(prefix_selector+" td[class='address']").text();
-            var longitude = $(prefix_selector+" td[class='longitude']").text();
-            var latitude = $(prefix_selector+" td[class='latitude']").text();
-            var phone_number = $(prefix_selector+" td[class='phone_number']").text();
-            var sales_tel = $(prefix_selector+" td[class='sales_tel']").text();
-            var content = $(prefix_selector+" td[class='content']").text();
-            var hypertext = $(prefix_selector+" td[class='hypertext']").text();
-            var editor_input = $(prefix_selector+" td[class='editor_input']").text();
-            // fill the edit modal
+        if(event.relatedTarget){ // if caused by update button click
             var modal = $(this);
             modal.find('form').attr('action','/travels/'+idClicked+'/update');
-            modal.find('input[name="name"]').val(name);
-            modal.find('input[name="region"]').val(region);
-            modal.find('input[name="classification"]').val(classification);
-            modal.find('input[name="address"]').val(address);
-            modal.find('input[name="longitude"]').val(longitude);
-            modal.find('input[name="latitude"]').val(latitude);
-            modal.find('input[name="phone_number"]').val(phone_number);
-            modal.find('input[name="sales_tel"]').val(sales_tel);
-            modal.find(':radio[name="content"][value='+content+']').prop('checked',true);
-            toggleContentView(content);
-            modal.find('input[name="hypertext"]').val(hypertext);
-            CKEDITOR.instances['update_editor'].setData(editor_input);
-            modal.find('.update-error-message').empty();
+            fillUpdateModal(modal);
         }
     })
     // clean content in create modal
     $('#create_travel_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            for(var i=0;i<columns.length-1;i++){
-                modal.find('input[name='+columns[i]+']').val("");
-            }
-//            modal.find('input[name="name"]').val("");
-//            modal.find('input[name="region"]').val("");
-//            modal.find('input[name="classification"]').val("");
-//            modal.find('input[name="address"]').val("");
-//            modal.find('input[name="longitude"]').val("");
-//            modal.find('input[name="latitude"]').val("");
-//            modal.find('input[name="phone_number"]').val("");
-//            modal.find('input[name="sales_tel"]').val("");
-            modal.find(':radio[name="content"]').prop('checked',false);
-            modal.find('input[name="hypertext"]').val("");
-            modal.find('.create-error-message').empty();
-            CKEDITOR.instances['create_editor'].setData("");
-            toggleContentView("");
+            cleanCreateModal(modal);
         }
     })
 </script>

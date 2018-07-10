@@ -21,17 +21,16 @@
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
-            <th>機票單號</th>
-            <th>地區</th> 
-            <th>促銷主題</th>
-            <th>起始顯示日期</th>
-            <th>截止顯示日期</th>
-            <th>航班出發日期</th>
-            <th>航班回程日期</th>
-            <th>售票說明</th>
-            <th>訂票專線</th>
-            <th>票價</th>
-            <th>內容</th>
+            <th id="ticket_number">機票單號</th>
+            <th id="region">地區</th> 
+            <th id="topic">促銷主題</th>
+            <th id="started_at">起始顯示日期</th>
+            <th id="ended_at">截止顯示日期</th>
+            <th id="depart_date">航班出發日期</th>
+            <th id="return_date">航班回程日期</th>
+            <th id="sales_instruction">售票說明</th>
+            <th id="sales_tel">訂票專線</th>
+            <th id="price">票價</th>
             <th></th>
         </tr>
     </thead>
@@ -48,8 +47,8 @@
             <td class="sales_instruction">{{$Ticket->sales_instruction}}</td>
             <td class="sales_tel">{{$Ticket->sales_tel}}</td>
             <td class="price">{{$Ticket->price}}</td>
-            <td class="content">{{$Ticket->content}}</td>
             <!--hidden td-->
+            <td class="content" hidden="true">{{$Ticket->content}}</td>
             <td class="hypertext" hidden="true">{{$Ticket->hypertext}}</td>
             <td class="editor_input" hidden="true">{{$Ticket->editor_input}}</td>
             <td>
@@ -65,7 +64,6 @@
 @endsection
 
 @section('page-script')
-
 <!--display validation error messages--> 
 @include('components.validationErrorMessage',['createModal'=>'create_tickets_modal','updateModal'=>'update_tickets_modal','updateRoute'=>'tickets'])
 
@@ -75,63 +73,28 @@
     CKEDITOR.replace('create_editor');
     CKEDITOR.replace('update_editor');
     CKEDITOR.replace('create_batch_editor');
-
+    // initalize info row column to columns[]
+    var columns = [];
+    $('tr[class="info"]:nth-child(1) th').each(function(){
+        if(this.id){
+            columns.push(this.id);
+        }
+    });
     // handle delete button
     $(".deleteBtn").click({route: "tickets"},ajaxDeleteFunction);
     // handle update button
     $('#update_tickets_modal').on('show.bs.modal', function(event){
         if(event.relatedTarget){ //if caused by update button click
-            // get data from the table
-            var prefix_selector = "tr[id="+idClicked+"]";
-            var region = $(prefix_selector+" td[class='region']").text();
-            var topic = $(prefix_selector+" td[class='topic']").text();
-            var started_at = $(prefix_selector+" td[class='started_at']").text();
-            var ended_at = $(prefix_selector+" td[class='ended_at']").text();
-            var depart_date = $(prefix_selector+" td[class='depart_date']").text();
-            var return_date = $(prefix_selector+" td[class='return_date']").text();
-            var sales_instruction = $(prefix_selector+" td[class='sales_instruction']").text();
-            var sales_tel = $(prefix_selector+" td[class='sales_tel']").text();
-            var price = $(prefix_selector+" td[class='price']").text();
-            var content = $(prefix_selector+" td[class='content']").text();
-            var hypertext = $(prefix_selector+" td[class='hypertext']").text();
-            var editor_input = $(prefix_selector+" td[class='editor_input']").text();
-            // fill the edit modal
             var modal = $(this);
             modal.find('form').attr('action','/tickets/'+idClicked+'/update');
-            modal.find('input[name="region"]').val(region);
-            modal.find('input[name="topic"]').val(topic);
-            modal.find('input[name="depart_date"]').val(depart_date);
-            modal.find('input[name="return_date"]').val(return_date);
-            modal.find('input[name="started_at"]').val(started_at);
-            modal.find('input[name="ended_at"]').val(ended_at);
-            modal.find('input[name="sales_instruction"]').val(sales_instruction);
-            modal.find('input[name="sales_tel"]').val(sales_tel);
-            modal.find('input[name="price"]').val(price);
-            modal.find(':radio[name="content"][value='+content+']').prop('checked',true);
-            toggleContentView(content);
-            modal.find('input[name="hypertext"]').val(hypertext);
-            CKEDITOR.instances['update_editor'].setData(editor_input);
-            modal.find('.update-error-message').empty();
+            fillUpdateModal(modal);
         }
     })
     // clean content in create modal
     $('#create_tickets_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            modal.find('input[name="region"]').val("");
-            modal.find('input[name="topic"]').val("");
-            modal.find('input[name="started_at"]').val("");
-            modal.find('input[name="ended_at"]').val("");
-            modal.find('input[name="depart_date"]').val("");
-            modal.find('input[name="return_date"]').val("");
-            modal.find('input[name="sales_instruction"]').val("");
-            modal.find('input[name="sales_tel"]').val("");
-            modal.find('input[name="price"]').val("");
-            modal.find(':radio[name="content"]').prop('checked',false);
-            modal.find('input[name="hypertext"]').val("");
-            modal.find('.create-error-message').empty();
-            CKEDITOR.instances['create_editor'].setData("");
-            toggleContentView("");
+            cleanCreateModal(modal);
         }
     })
 </script>

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="form-group col-md-7">
+    <div class="form-group col-md-6">
         <label class="col-form-label">標題:</label>
         <input type="text" class="form-control" name="title" value="{{old('title')}}">
     </div>
@@ -16,14 +16,12 @@
     </div>
 </div>
 <div class="row">
-    <div class="form-group col-md-12">
+    <div class="form-group col-md-6">
         <label for="picture" class="col-form-label">圖片:</label>
         <input type="file" name="picture">
-        <img class="image">
+        <img class="image" height="150" width="240">
     </div>
-</div>
-<div class="row">
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-5">
         <label for="ended_at" class="col-form-label">截止顯示日期:</label>
         <input type="date" class="form-control" name="ended_at" value="{{old('ended_at')}}">
     </div>

@@ -76,7 +76,7 @@
                     }
                 });
             }
-            // change view corresponding to radio button
+            // change view to corresponding  radio
             function toggleContentView(condition){
                 if(condition == '超連結內文'){
                     $('.hyper-link-field').show();
@@ -90,9 +90,32 @@
                     $('.content-field').hide();
                 }
             }
-            // clear modal content
-            function clearModal(){
-                
+            // fill update modal (type input[name=?])
+            function fillUpdateModal(modal){
+                var prefix_selector = "tr[id="+idClicked+"]";
+                for(var i=0;i<columns.length;i++){
+                    var col_value = $(prefix_selector+" td[class="+columns[i]+"]").text();
+                    modal.find('input[name='+columns[i]+']').val(col_value);
+                }
+                var content = $(prefix_selector+" td[class='content']").text();
+                var hypertext = $(prefix_selector+" td[class='hypertext']").text();
+                var editor_input = $(prefix_selector+" td[class='editor_input']").text();
+                modal.find('input[name="content"][value='+content+']').prop('checked',true);
+                modal.find('input[name="hypertext"]').val(hypertext);
+                modal.find('.update-error-message').empty();
+                CKEDITOR.instances['update_editor'].setData(editor_input);
+                toggleContentView(content);
+            }
+            // clean create modal (type input[name=?])
+            function cleanCreateModal(modal){
+                for(var i=0;i<columns.length;i++){
+                    modal.find('input[name='+columns[i]+']').val("");
+                }
+                modal.find('input[name="content"][value=無內文]').prop('checked',true);
+                modal.find('input[name="hypertext"]').val("");
+                modal.find('.create-error-message').empty();
+                CKEDITOR.instances['create_editor'].setData("");
+                toggleContentView("");
             }
         </script>
         @yield('page-script')

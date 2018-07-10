@@ -3,10 +3,10 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand">最新消息</a>
+            <a class="navbar-brand">旅遊必備</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="modal" data-target="#create_news_modal"><span class="glyphicon glyphicon-plus"></span> 新增消息</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#create_news_modal"><span class="glyphicon glyphicon-plus"></span> 新增旅遊必備</a></li>
         </ul>
         @include('components.toolbar')
     </div>
@@ -14,9 +14,9 @@
 @endsection
 
 @section('content')
-    @include('components.news.createModal',['modal_id'=>'create_news_modal'])
-    @include('components.news.updateModal',['modal_id'=>'update_news_modal'])
-    @include('components.news.deleteModal',['modal_id'=>'delete_news_modal'])
+    @include('components.travel_items.createModal',['modal_id'=>'create_travel_items_modal'])
+    @include('components.travel_items.updateModal',['modal_id'=>'update_travel_items_modal'])
+    @include('components.travel_items.deleteModal',['modal_id'=>'delete_travel_items_modal'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
