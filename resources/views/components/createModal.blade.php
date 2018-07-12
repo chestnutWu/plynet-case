@@ -1,11 +1,11 @@
 @extends('components.masterModal')
-@section('modal_title','建立「旅遊必備」')
+@section('modal_title','xxxxx')
 @section('modal_content')
     @include('components.modalTabs')
-    <form action="/items/create" method="post" enctype="multipart/form-data">
+    <form action="/xxxxx/create" method="post" enctype="multipart/form-data">
         <div class="tab-content">
             <div class="tab-pane fade in active" id="create-basic-info" role="tabpanel" aria-labelledby="home-tab">
-                @include('components.travel_items.basicInfo')
+                @include('components.xxxxx.BasicInfo')
                 <button type="submit" class="btn btn-primary">新增</button>
                 <div class="create-error-message"></div>
             </div>

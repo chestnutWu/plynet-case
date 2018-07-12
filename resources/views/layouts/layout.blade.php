@@ -32,8 +32,7 @@
             </div>
         </div>
 
-        <footer>
-        </footer>
+        <footer></footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <!--import bootstrap-select-->
@@ -45,6 +44,7 @@
         <!--import common script-->
         <script>
             var idClicked;
+            var columns = [];
             $(document).ready(function(){
                 // fixed the input problem using html editor in modal
                 $.fn.modal.Constructor.prototype.enforceFocus = function(){
@@ -59,8 +59,18 @@
                 $(".delete_record_id").click(function(event){idClicked = event.target.id;});
                 $(".update_record_id").click(function(event){idClicked = event.target.id;});
                 $('input[name="content"]').on('change',function(){toggleContentView(this.value);})
+                // initalize info row column obj({key : value}) to columns[]
+                $('tr[class="info"]:nth-child(1) th').each(function(){
+                    if(this.id){
+                        var obj = {};
+                        var key = this.id;
+                        var value = this.getAttribute("data-column-type");
+                        obj[key] = value;
+                        columns.push(obj);  
+                    }
+                });
             });
-            // delete ajax function
+            // ajax delete
             function ajaxDeleteFunction(event){
                 var route = event.data.route;
                 $.ajax(
@@ -76,7 +86,7 @@
                     }
                 });
             }
-            // change view to corresponding  radio
+            // radio toggle view
             function toggleContentView(condition){
                 if(condition == '超連結內文'){
                     $('.hyper-link-field').show();
@@ -90,32 +100,65 @@
                     $('.content-field').hide();
                 }
             }
-            // fill update modal (type input[name=?])
-            function fillUpdateModal(modal){
+            // fill update modal with parameter="update";clean create modal with parameter="create"
+            function initializeModal(modal,type){
                 var prefix_selector = "tr[id="+idClicked+"]";
                 for(var i=0;i<columns.length;i++){
-                    var col_value = $(prefix_selector+" td[class="+columns[i]+"]").text();
-                    modal.find('input[name='+columns[i]+']').val(col_value);
+                    var column_name = Object.keys(columns[i])[0];
+                    var column_type = columns[i][column_name];
+                    var column_value = "";
+                    switch(column_type){
+                        case 'text':
+                            if(type === 'update'){
+                                column_value = $(prefix_selector+" td[class="+column_name+"]").text();
+                            }
+                            modal.find('input[name='+column_name+']').val(column_value);
+                            break;
+                        case 'selectpicker':
+                            if(type === 'update'){
+                                column_value = $(prefix_selector+" td[class="+column_name+"]").text();
+                            }else{
+                                column_value = '最新消息';
+                            }
+                            modal.find('select[name='+column_name+']').selectpicker('val',column_value);
+                            break;
+                        case 'textarea':
+                            if(type === 'update'){
+                                column_value = $(prefix_selector+" td[class="+column_name+"]").text();
+                            }
+                            modal.find('textarea[name='+column_name+']').val(column_value);
+                            break;
+                        case 'radio':
+                            if(type === 'update'){
+                                column_value = $(prefix_selector+" td[class="+column_name+"]").text();
+                            }else{
+                                column_value = '無內文';
+                            }
+                            modal.find('input[name='+column_name+'][value='+column_value+']').prop('checked',true);
+                            toggleContentView(column_value);
+                            break;
+                        case 'CKEDITOR':
+                            if(type === 'update'){
+                                column_value = $(prefix_selector+" td[class="+column_name+"]").text();
+                                CKEDITOR.instances['update_editor'].setData(column_value);
+                            }else{
+                                CKEDITOR.instances['create_editor'].setData(column_value);
+                            }
+                            break;
+                        case 'image':
+                            if(type === 'update'){
+                               column_value = $(prefix_selector+" td[class="+column_name+"] img").attr('src'); 
+                            }
+                            modal.find('input[name="picture"]').val("");
+                            modal.find('.image').attr('src',column_value);
+                            break;
+                    }
                 }
-                var content = $(prefix_selector+" td[class='content']").text();
-                var hypertext = $(prefix_selector+" td[class='hypertext']").text();
-                var editor_input = $(prefix_selector+" td[class='editor_input']").text();
-                modal.find('input[name="content"][value='+content+']').prop('checked',true);
-                modal.find('input[name="hypertext"]').val(hypertext);
-                modal.find('.update-error-message').empty();
-                CKEDITOR.instances['update_editor'].setData(editor_input);
-                toggleContentView(content);
-            }
-            // clean create modal (type input[name=?])
-            function cleanCreateModal(modal){
-                for(var i=0;i<columns.length;i++){
-                    modal.find('input[name='+columns[i]+']').val("");
+                if(type === 'update'){
+                    modal.find('.update-error-message').empty();
+                }else{
+                    modal.find('.create-error-message').empty();
                 }
-                modal.find('input[name="content"][value=無內文]').prop('checked',true);
-                modal.find('input[name="hypertext"]').val("");
-                modal.find('.create-error-message').empty();
-                CKEDITOR.instances['create_editor'].setData("");
-                toggleContentView("");
             }
         </script>
         @yield('page-script')

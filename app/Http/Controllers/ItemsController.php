@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\DataEntity\News;
+use Illuminate\Http\Request;
+use App\DataEntity\Item;
 use Image;
 use Validator;
 use Session;
 
-class NewsController extends Controller
+class ItemsController extends Controller
 {
     //驗證規則
     private $rules = 
@@ -27,63 +27,58 @@ class NewsController extends Controller
             'required',
             'max:2000'
         ],
-        'ended_at'=>[
-            'required',
-            'date',
-            'after:today'
-        ],
         'content'=>[
             'required'
         ]
     ];
-    //顯示「最新消息」資料
-    public function newsPageList(){
+    //顯示「旅遊必備」資料
+    public function itemsPageList(){
         $row_per_page = 10;
-        $NewsPaginate = News::OrderBy('created_at','desc')->paginate($row_per_page);;
-        $binding = ['News'=>$NewsPaginate];
-        return view('news',$binding);
+        $ItemsPaginate = Item::OrderBy('created_at','desc')->paginate($row_per_page);
+        $binding = ['Items'=>$ItemsPaginate];
+        return view('travel_items',$binding);
     }
-    //新增「最新消息」
-    public function newsCreate(){
-        $input = request()->all();//接收表單資料
+    //建立「旅遊必備」
+    public function itemCreate(){
+        $input = request()->all();
         $validator = Validator::make($input,$this->rules);
         if($validator->fails()){
             Session::flash('create_error',true);
-            return redirect('/news')->withErrors($validator)->withInput();
+            return redirect('/items')->withErrors($validator)->withInput();
         }
         $input = $this->pictureProcess($input);//照片處理
         $input = $this->judgeSelectedContent($input);//判斷內文選項
-        News::create($input);
-        return redirect('/news');
+        Item::create($input);
+        return redirect('/items');
     }
-    //更新「最新消息」
-    public function newsUpdate($news_id){
-        $LatestNews = News::findOrFail($news_id);
+    //更新「旅遊必備」
+    public function itemUpdate($item_id){
+        $TheItem = Item::findOrFail($item_id);
         $input = request()->all();
         $update_rules = array_except($this->rules,['picture']);
         $update_rules = array_add($update_rules,'picture',['file','image','max:10240']);
         $validator = Validator::make($input,$update_rules);
         if($validator->fails()){
             Session::flash('update_error',true);
-            session()->put('update_id',$news_id);
-            return redirect('/news')->withErrors($validator)->withInput();
+            session()->put('update_id',$item_id);
+            return redirect('/items')->withErrors($validator)->withInput();
         }
         if(request()->hasFile('picture')){$input = $this->pictureProcess($input);}//照片處理
         $input = $this->judgeSelectedContent($input);//判斷內文選項
-        $LatestNews->update($input);
-        return redirect('/news');
+        $TheItem->update($input);
+        return redirect('/items');
     }
-    //刪除「最新消息」
-    public function newsDelete($news_id){
-        $News = News::find($news_id);
-        $News->delete();
+    //刪除「旅遊必備」
+    public function itemDelete($item_id){
+        $Item = Item::find($item_id);
+        $Item->delete();
     }
-    /*self define funtion*/
+    /*self define function*/
     public function pictureProcess($input){
         $picture = $input['picture'];
         $file_extension = $picture->getClientOriginalExtension();
         $file_name = uniqid().'.'.$file_extension;
-        $file_relative_path = 'images/News/'.$file_name;
+        $file_relative_path = 'images/Items/'.$file_name;
         $file_path = public_path($file_relative_path);
         $image = Image::make($picture)->fit(300,150)->save($file_path);
         $input['picture'] = $file_relative_path;

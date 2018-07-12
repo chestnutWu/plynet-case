@@ -14,23 +14,27 @@
 </nav>
 @endsection
 @section('content')
-    @include('components.ticket.createModal',['modal_id'=>'create_tickets_modal'])
+    @include('components.ticket.createModal',['modal_id'=>'create_tickets_modal',
+    'modal_title'=>'建立「特價機票」'],'modal_route'=>'tickets','modal_folder'=>'tickets')
     @include('components.ticket.updateModal',['modal_id'=>'update_tickets_modal'])
     @include('components.ticket.deleteModal',['modal_id'=>'delete_tickets_modal'])
     @include('components.ticket.createBatchModal',['modal_id'=>'create_batch_tickets_modal'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
-            <th id="ticket_number">機票單號</th>
-            <th id="region">地區</th> 
-            <th id="topic">促銷主題</th>
-            <th id="started_at">起始顯示日期</th>
-            <th id="ended_at">截止顯示日期</th>
-            <th id="depart_date">航班出發日期</th>
-            <th id="return_date">航班回程日期</th>
-            <th id="sales_instruction">售票說明</th>
-            <th id="sales_tel">訂票專線</th>
-            <th id="price">票價</th>
+            <th id="ticket_number" data-column-type="text">機票單號</th>
+            <th id="region" data-column-type="text">地區</th> 
+            <th id="topic" data-column-type="text">促銷主題</th>
+            <th id="started_at" data-column-type="text">起始顯示日期</th>
+            <th id="ended_at" data-column-type="text">截止顯示日期</th>
+            <th id="depart_date" data-column-type="text">航班出發日期</th>
+            <th id="return_date" data-column-type="text">航班回程日期</th>
+            <th id="sales_instruction" data-column-type="text">售票說明</th>
+            <th id="sales_tel" data-column-type="text">訂票專線</th>
+            <th id="price" data-column-type="text">票價</th>
+            <th id="content" data-column-type="radio" hidden="true">內文</th>
+            <th id="hypertext" data-column-type="text" hidden="true">超連結</th>
+            <th id="editor_input" data-column-type="CKEDITOR" hidden="true">編輯器</th>
             <th></th>
         </tr>
     </thead>
@@ -73,13 +77,6 @@
     CKEDITOR.replace('create_editor');
     CKEDITOR.replace('update_editor');
     CKEDITOR.replace('create_batch_editor');
-    // initalize info row column to columns[]
-    var columns = [];
-    $('tr[class="info"]:nth-child(1) th').each(function(){
-        if(this.id){
-            columns.push(this.id);
-        }
-    });
     // handle delete button
     $(".deleteBtn").click({route: "tickets"},ajaxDeleteFunction);
     // handle update button
@@ -87,14 +84,14 @@
         if(event.relatedTarget){ //if caused by update button click
             var modal = $(this);
             modal.find('form').attr('action','/tickets/'+idClicked+'/update');
-            fillUpdateModal(modal);
+            initializeModal(modal,'update');
         }
     })
     // clean content in create modal
     $('#create_tickets_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            cleanCreateModal(modal);
+            initializeModal(modal,'create');
         }
     })
 </script>

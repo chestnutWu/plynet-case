@@ -40,6 +40,15 @@ Route::group(['prefix'=>'travels'],function(){
         Route::put('/{travel_id}/update','TravelsController@travelUpdate');
     });   
 });
+//旅遊必備路由
+Route::group(['prefix'=>'items'],function(){
+    Route::group(['middleware'=>['auth']],function(){
+        Route::get('/','ItemsController@itemsPageList');
+        Route::post('/create','ItemsController@itemCreate');
+        Route::delete('/{item_id}/delete','ItemsController@itemDelete');
+        Route::put('/{item_id}/update','ItemsController@itemUpdate');
+    });
+});
 
 //訂單查詢路由
 Route::group(['prefix'=>'orders'],function(){

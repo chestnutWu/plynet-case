@@ -20,14 +20,17 @@
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
-            <th id="region">區域</th>
-            <th id="name">景點</th>
-            <th id="classification">分類</th>
-            <th id="address">地址</th>
-            <th id="longitude">經度</th>
-            <th id="latitude">緯度</th>
-            <th id="phone_number">連絡電話</th>
-            <th id="sales_tel">售票專線</th>
+            <th id="region" data-column-type="text">區域</th>
+            <th id="name" data-column-type="text">景點</th>
+            <th id="classification" data-column-type="text">分類</th>
+            <th id="address" data-column-type="text">地址</th>
+            <th id="longitude" data-column-type="text">經度</th>
+            <th id="latitude" data-column-type="text">緯度</th>
+            <th id="phone_number" data-column-type="text">連絡電話</th>
+            <th id="sales_tel" data-column-type="text">售票專線</th>
+            <th id="content" data-column-type="radio" hidden="true">內文</th>
+            <th id="hypertext" data-column-type="text" hidden="true">超連結</th>
+            <th id="editor_input" data-column-type="CKEDITOR" hidden="true">編輯器</th>
             <th></th>
         </tr>
     </thead>
@@ -65,13 +68,6 @@
 <script type="text/javascript">
     CKEDITOR.replace('create_editor');
     CKEDITOR.replace('update_editor');
-    // initalize info row column to columns[]
-    var columns = [];
-    $('tr[class="info"]:nth-child(1) th').each(function(){
-        if(this.id){
-            columns.push(this.id);
-        }
-    });
     // handle delete button
     $(".deleteBtn").click({route: "travels"},ajaxDeleteFunction);
     // handle update button
@@ -79,14 +75,14 @@
         if(event.relatedTarget){ // if caused by update button click
             var modal = $(this);
             modal.find('form').attr('action','/travels/'+idClicked+'/update');
-            fillUpdateModal(modal);
+            initializeModal(modal,'update');
         }
     })
     // clean content in create modal
     $('#create_travel_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            cleanCreateModal(modal);
+            initializeModal(modal,'create');
         }
     })
 </script>

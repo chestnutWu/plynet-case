@@ -20,12 +20,15 @@
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
-            <th id="title">標題</th>
-            <th>分類</th> 
-            <th>小圖</th>
-            <th>簡介</th>
-            <th id="created_at">發布日期</th> 
-            <th id="ended_at">截止顯示日期</th>
+            <th id="title" data-column-type="text">標題</th>
+            <th id="classification" data-column-type="selectpicker">分類</th> 
+            <th id="picture" data-column-type="image">圖片</th>
+            <th id="introduction" data-column-type="textarea">簡介</th>
+            <th id="created_at" data-column-type="text">發布日期</th> 
+            <th id="ended_at" data-column-type="text">截止顯示日期</th>
+            <th id="content" data-column-type="radio" hidden="true">內文</th>
+            <th id="hypertext" data-column-type="text" hidden="true">超連結</th>
+            <th id="editor_input" data-column-type="CKEDITOR" hidden="true">編輯器</th>
             <th></th>
         </tr>
     </thead>
@@ -34,7 +37,7 @@
         <tr id="{{$NewsRow->id}}">
             <td class="title">{{$NewsRow->title}}</td>
             <td class="classification">{{$NewsRow->classification}}</td>
-            <td class="picture"><img src="{{$NewsRow->picture or '\images\News\default.jpg'}}"></td>
+            <td class="picture"><img src="{{$NewsRow->picture or '\images\default.jpg'}}"></td>
             <td class="introduction">{{$NewsRow->introduction}}</td>
             <td class="created_at">{{$NewsRow->created_at}}</td>
             <td class="ended_at">{{$NewsRow->ended_at}}</td>
@@ -61,41 +64,21 @@
 <script type="text/javascript">
     CKEDITOR.replace('create_editor');
     CKEDITOR.replace('update_editor');
-    // initalize info row column to columns[]
-    var columns = [];
-    $('tr[class="info"]:nth-child(1) th').each(function(){
-        if(this.id){
-            columns.push(this.id);
-        }
-    });
     // handle delete button
     $(".deleteBtn").click({route: "news"},ajaxDeleteFunction);
     // handle update button
     $('#update_news_modal').on('show.bs.modal', function(event){
         if(event.relatedTarget){ //if caused by update button click
-            var prefix_selector = "tr[id="+idClicked+"]";
             var modal = $(this);
             modal.find('form').attr('action','/news/'+idClicked+'/update');
-            fillUpdateModal(modal);
-            // fill different type from input[name=?]
-            var image = $(prefix_selector+" td[class='picture'] img").attr('src');
-            modal.find('.image').attr('src',image);
-            var classification = $(prefix_selector+" td[class='classification']").text();
-            modal.find('select[name="classification"]').selectpicker('val',classification);
-            var introduction = $(prefix_selector+" td[class='introduction']").text();
-            modal.find('textarea[name="introduction"]').text(introduction);
+            initializeModal(modal,'update');
         }
     })
     // clean content in create modal
     $('#create_news_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            cleanCreateModal(modal);
-            // clear different type from input[name=?]
-            modal.find('.selectpicker').selectpicker('val',"最新消息");
-            modal.find('input[name="picture"]').val("");
-            modal.find('.image').attr('src',"");
-            modal.find('textarea[name="introduction"]').val("");
+            initializeModal(modal,'create');
         }
     })
     // display changed image
