@@ -6,7 +6,7 @@
             <a href="/news" class="list-group-item list-group-item-action">最新消息</a>
             <a href="/tickets" class="list-group-item list-group-item-action">特價清倉</a>
             <a href="/items" class="list-group-item list-group-item-action">旅遊必備</a>
-            <a href="#" class="list-group-item list-group-item-action">旅遊資訊</a>
+            <a href="/information" class="list-group-item list-group-item-action">旅遊資訊</a>
             <a href="/travels" class="list-group-item list-group-item-action">出去走走</a>
             <a href="/orders" class="list-group-item list-group-item-action">訂單查詢</a>
         </ul>

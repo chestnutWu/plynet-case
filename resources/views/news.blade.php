@@ -14,9 +14,12 @@
 @endsection
 
 @section('content')
-    @include('components.news.createModal',['modal_id'=>'create_news_modal'])
-    @include('components.news.updateModal',['modal_id'=>'update_news_modal'])
-    @include('components.news.deleteModal',['modal_id'=>'delete_news_modal'])
+    @include('components.modal.createModal',['modal_id'=>'create_news_modal',
+    'modal_title'=>'建立「最新消息」','create_route'=>'news','basic_info_folder'=>'news'])
+    @include('components.modal.updateModal',['modal_id'=>'update_news_modal',
+    'modal_title'=>'更新「最新消息」','basic_info_folder'=>'news'])
+    @include('components.modal.deleteModal',['modal_id'=>'delete_news_modal',
+    'modal_title'=>'刪除「最新消息」','confirm_message'=>'確定刪除此「最新消息」?'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
@@ -26,6 +29,7 @@
             <th id="introduction" data-column-type="textarea">簡介</th>
             <th id="created_at" data-column-type="text">發布日期</th> 
             <th id="ended_at" data-column-type="text">截止顯示日期</th>
+            <!--hidden th-->
             <th id="content" data-column-type="radio" hidden="true">內文</th>
             <th id="hypertext" data-column-type="text" hidden="true">超連結</th>
             <th id="editor_input" data-column-type="CKEDITOR" hidden="true">編輯器</th>
@@ -53,7 +57,6 @@
         @endforeach
     </tbody>
 </table>
-<!--分頁頁數按鈕-->
 <center>{{$News->links()}}</center>
 @endsection
 
@@ -66,22 +69,22 @@
     CKEDITOR.replace('update_editor');
     // handle delete button
     $(".deleteBtn").click({route: "news"},ajaxDeleteFunction);
-    // handle update button
+    // update modal handler
     $('#update_news_modal').on('show.bs.modal', function(event){
-        if(event.relatedTarget){ //if caused by update button click
+        if(event.relatedTarget){ // if modal triggered by update button click
             var modal = $(this);
             modal.find('form').attr('action','/news/'+idClicked+'/update');
-            initializeModal(modal,'update');
+            initializeModal(modal,'update');// fill the update modal
         }
     })
-    // clean content in create modal
+    // create modal handler
     $('#create_news_modal').on('show.bs.modal',function(event){
-        if(event.relatedTarget){ // if caused by create button click
+        if(event.relatedTarget){ // if modal triggered by create button click
             var modal = $(this);
-            initializeModal(modal,'create');
+            initializeModal(modal,'create');// clean the create modal
         }
     })
-    // display changed image
+    // image on change event
     $('input[type="file"]').change(function(){
         var fileInput = this;
         if(fileInput.files[0]){

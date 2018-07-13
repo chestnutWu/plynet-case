@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="{{ URL::asset('css/batch-create-form.css') }}" />
         <!--import icon and material-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <style>img {max-width: 100%;height: auto;width: auto\9;}</style>
         <!--build csrf token for ajax-->
         <meta name="csrf-token" content="{{csrf_token()}}">
     </head>

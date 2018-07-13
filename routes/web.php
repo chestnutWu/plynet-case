@@ -49,6 +49,15 @@ Route::group(['prefix'=>'items'],function(){
         Route::put('/{item_id}/update','ItemsController@itemUpdate');
     });
 });
+//旅遊資訊路由
+Route::group(['prefix'=>'information'],function(){
+   Route::group(['middleware'=>['auth']],function(){
+        Route::get('/','InformationController@informationPageList');
+        Route::post('/create','InformationController@informationCreate');
+        Route::delete('/{information_id}/delete','InformationController@informationDelete');
+        Route::put('/{information_id}/update','InformationController@informationUpdate');
+   }); 
+});
 
 //訂單查詢路由
 Route::group(['prefix'=>'orders'],function(){

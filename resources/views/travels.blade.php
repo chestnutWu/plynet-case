@@ -14,20 +14,24 @@
 </nav>
 @endsection
 @section('content')
-    @include('components.travel.createModal',['modal_id'=>'create_travel_modal'])
-    @include('components.travel.updateModal',['modal_id'=>'update_travel_modal'])
-    @include('components.travel.deleteModal',['modal_id'=>'delete_travel_modal'])
+    @include('components.modal.createModal',['modal_id'=>'create_travel_modal',
+    'modal_title'=>'建立「出去走走」','create_route'=>'travels','basic_info_folder'=>'travel'])
+    @include('components.modal.updateModal',['modal_id'=>'update_travel_modal',
+    'modal_title'=>'更新「出去走走」','basic_info_folder'=>'travel'])
+    @include('components.modal.deleteModal',['modal_id'=>'delete_travel_modal',
+    'modal_title'=>'刪除「出去走走」','confirm_message'=>'確定刪除此「出去走走」?'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
         <tr class="info">
             <th id="region" data-column-type="text">區域</th>
             <th id="name" data-column-type="text">景點</th>
-            <th id="classification" data-column-type="text">分類</th>
+            <th id="classification" data-column-type="selectpicker">分類</th>
             <th id="address" data-column-type="text">地址</th>
             <th id="longitude" data-column-type="text">經度</th>
             <th id="latitude" data-column-type="text">緯度</th>
             <th id="phone_number" data-column-type="text">連絡電話</th>
             <th id="sales_tel" data-column-type="text">售票專線</th>
+            <!--hidden th-->
             <th id="content" data-column-type="radio" hidden="true">內文</th>
             <th id="hypertext" data-column-type="text" hidden="true">超連結</th>
             <th id="editor_input" data-column-type="CKEDITOR" hidden="true">編輯器</th>
@@ -57,7 +61,6 @@
         @endforeach
     </tbody>
 </table>
-<!--分頁頁數按鈕-->
 <center>{{$Travels->links()}}</center>
 @endsection
 
@@ -70,19 +73,19 @@
     CKEDITOR.replace('update_editor');
     // handle delete button
     $(".deleteBtn").click({route: "travels"},ajaxDeleteFunction);
-    // handle update button
+    // update modal handler
     $('#update_travel_modal').on('show.bs.modal', function(event){
         if(event.relatedTarget){ // if caused by update button click
             var modal = $(this);
             modal.find('form').attr('action','/travels/'+idClicked+'/update');
-            initializeModal(modal,'update');
+            initializeModal(modal,'update');// fill the update modal
         }
     })
-    // clean content in create modal
+    // create modal handler
     $('#create_travel_modal').on('show.bs.modal',function(event){
         if(event.relatedTarget){ // if caused by create button click
             var modal = $(this);
-            initializeModal(modal,'create');
+            initializeModal(modal,'create');// clean the create modal
         }
     })
 </script>

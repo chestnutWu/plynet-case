@@ -62,7 +62,6 @@
         @endforeach
     </tbody>
 </table>
-<!--分頁頁數按鈕-->
 <center>{{$Orders->links()}}</center>
 @endsection
 

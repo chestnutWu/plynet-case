@@ -19,7 +19,7 @@
     <div class="form-group col-md-6">
         <label for="picture" class="col-form-label">圖片:</label>
         <input type="file" name="picture">
-        <img class="image" height="150" width="240">
+        <img class="image">
     </div>
     <div class="form-group col-md-5">
         <label for="ended_at" class="col-form-label">截止顯示日期:</label>

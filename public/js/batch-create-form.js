@@ -3,7 +3,7 @@ var objectArray = [];
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
 
-// This function will display the specified tab of the form 
+// display the specified tab of the form 
 function showTab(tabPage) {
     var tabs = document.getElementsByClassName("tab");
     tabs[tabPage].style.display = "block";
@@ -29,7 +29,7 @@ function showTab(tabPage) {
     fixStepIndicator(tabPage);
 }
 
-// This function will figure out which tab to display
+// figure out which tab to display
 function nextPrev(n) { // n = 1(next page) , n = -1 (prev page)
     var tabs = document.getElementsByClassName("tab");
     // Exit the function if any field in the current tab is invalid
@@ -47,13 +47,14 @@ function nextPrev(n) { // n = 1(next page) , n = -1 (prev page)
     showTab(currentTab);
 }
 
-// This function deals with validation of the form fields
+// deals with validation of the form fields
 function validateForm() {
     var tabs , inputs , validations , i , valid = true;
+    var started_at,ended_at,depart_date,return_date;
     tabs = document.getElementsByClassName("tab");
     inputs = tabs[currentTab].getElementsByTagName("input");
     validations = tabs[currentTab].getElementsByClassName("validation-msg");
-    // A loop that checks every input field in the current tab
+    // checks every input field in the current tab
     for (i = 0; i < inputs.length; i++) {
         if (inputs[i].value == "") {
             inputs[i].className += " invalid";
@@ -71,7 +72,35 @@ function validateForm() {
                 valid = false;
             }
         }
+//        if (inputs[i].name == "started_at") {started_at = inputs[i].value; console.log('hi');}
+//        if (inputs[i].name == "ended_at") {ended_at = inputs[i].value; console.log('hi');}
+//        if (inputs[i].name == "depart_date") {depart_date = inputs[i].value; console.log('hi');}
+//        if (inputs[i].name == "return_date") {return_date = inputs[i].value; console.log('hi');}
     }
+//    if(started_at > ended_at){ // 起始日大於截止日
+//        inputs[0].className += " invalid";
+//        validations[0].innerHTML = "顯示起始日不能晚於截止日";
+//        valid = false;
+//    }else {
+//        inputs[0].classList.remove("invalid");
+//        validations[0].innerHTML = "";
+//    }
+//    if(depart_date > return_date){ // 出發日大於回程日
+//        inputs[2].className += " invalid";
+//        validations[2].innerHTML = "出發日不能晚於回程日";
+//        valid = false;
+//    }else {
+//        inputs[2].classList.remove("invalid");
+//        validations[2].innerHTML = "";
+//    }
+//    if(ended_at > depart_date){
+//        inputs[1].className += " invalid";
+//        validations[1].innerHTML = "顯示截止日不能晚於出發日";
+//        valid = false;
+//    }else{
+//        inputs[1].classList.remove("invalid");
+//        validations[1].innerHTML = "";
+//    }
     // If the valid status is true, mark the step as finished and valid
     if (valid) {document.getElementsByClassName("step")[currentTab].className += " finish";}
     return valid;
@@ -88,15 +117,6 @@ function fixStepIndicator(tabPage) {
 }
 
 $('#create_batch_tickets_modal').on('show.bs.modal', function (e) {create_batch_modal = $(this); });
-//function cleanField() {
-//    create_batch_modal.find('input[name="started_at"]').val("");
-//    create_batch_modal.find('input[name="ended_at"]').val("");
-//    create_batch_modal.find('input[name="depart_date"]').val("");
-//    create_batch_modal.find('input[name="return_date"]').val("");
-//    create_batch_modal.find('input[name="price"]').val("");
-//    create_batch_modal.find('input[name="sales_instruction"]').val("");
-//    CKEDITOR.instances['create_batch_editor'].setData("");
-//}
 
 function sendCreateRequest(){
     $.ajax({
@@ -143,7 +163,6 @@ function addBatch() {
             editor_input: CKEDITOR.instances['create_batch_editor'].getData()
         };
         objectArray.push(batchDataObject);
-        alert("加入了: "+JSON.stringify(batchDataObject)); 
+        alert("加入一筆資料到批量!"); //JSON.stringify(batchDataObject)
     }
-    //cleanField();
 }

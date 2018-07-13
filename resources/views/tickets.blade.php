@@ -14,10 +14,12 @@
 </nav>
 @endsection
 @section('content')
-    @include('components.ticket.createModal',['modal_id'=>'create_tickets_modal',
-    'modal_title'=>'建立「特價機票」'],'modal_route'=>'tickets','modal_folder'=>'tickets')
-    @include('components.ticket.updateModal',['modal_id'=>'update_tickets_modal'])
-    @include('components.ticket.deleteModal',['modal_id'=>'delete_tickets_modal'])
+    @include('components.modal.createModal',['modal_id'=>'create_tickets_modal',
+    'modal_title'=>'建立「特價機票」','create_route'=>'tickets','basic_info_folder'=>'ticket'])
+    @include('components.modal.updateModal',['modal_id'=>'update_tickets_modal',
+    'modal_title'=>'更新「特價機票」','basic_info_folder'=>'ticket'])
+    @include('components.modal.deleteModal',['modal_id'=>'delete_tickets_modal',
+    'modal_title'=>'刪除「特價機票」','confirm_message'=>'確定刪除此「特價機票」?'])
     @include('components.ticket.createBatchModal',['modal_id'=>'create_batch_tickets_modal'])
 <table class="table table-striped table-hover col-md-12">
     <thead>
@@ -25,10 +27,10 @@
             <th id="ticket_number" data-column-type="text">機票單號</th>
             <th id="region" data-column-type="text">地區</th> 
             <th id="topic" data-column-type="text">促銷主題</th>
-            <th id="started_at" data-column-type="text">起始顯示日期</th>
-            <th id="ended_at" data-column-type="text">截止顯示日期</th>
-            <th id="depart_date" data-column-type="text">航班出發日期</th>
-            <th id="return_date" data-column-type="text">航班回程日期</th>
+            <th id="started_at" data-column-type="text">起始顯示日</th>
+            <th id="ended_at" data-column-type="text">截止顯示日</th>
+            <th id="depart_date" data-column-type="text">航班出發日</th>
+            <th id="return_date" data-column-type="text">航班回程日</th>
             <th id="sales_instruction" data-column-type="text">售票說明</th>
             <th id="sales_tel" data-column-type="text">訂票專線</th>
             <th id="price" data-column-type="text">票價</th>
@@ -63,7 +65,6 @@
         @endforeach
     </tbody>
 </table>
-<!--分頁頁數按鈕-->
 <center>{{$Tickets->links()}}</center>
 @endsection
 
@@ -79,19 +80,19 @@
     CKEDITOR.replace('create_batch_editor');
     // handle delete button
     $(".deleteBtn").click({route: "tickets"},ajaxDeleteFunction);
-    // handle update button
+    // update modal handler
     $('#update_tickets_modal').on('show.bs.modal', function(event){
-        if(event.relatedTarget){ //if caused by update button click
+        if(event.relatedTarget){ // if modal triggered by update button click
             var modal = $(this);
             modal.find('form').attr('action','/tickets/'+idClicked+'/update');
-            initializeModal(modal,'update');
+            initializeModal(modal,'update');// fill the update modal
         }
     })
-    // clean content in create modal
+    // create modal handler
     $('#create_tickets_modal').on('show.bs.modal',function(event){
-        if(event.relatedTarget){ // if caused by create button click
+        if(event.relatedTarget){ // if modal triggered by create button click
             var modal = $(this);
-            initializeModal(modal,'create');
+            initializeModal(modal,'create');// clean the create modal
         }
     })
 </script>

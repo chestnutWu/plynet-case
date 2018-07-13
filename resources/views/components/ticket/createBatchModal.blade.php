@@ -1,4 +1,4 @@
-@extends('components.masterModal')
+@extends('components.modal.masterModal')
 @section('modal_title')<h1>批量建立「特價機票」</h1>@overwrite
 @section('modal_content')
     <div class="tab">
